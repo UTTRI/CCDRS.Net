@@ -16,5 +16,5 @@ public partial class Vehicle
     /// <summary>
     /// Stores the name of the vehicle, e.g. auto
     /// </summary>
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty!;
 }
