@@ -31,7 +31,7 @@ public partial class CCDRSContext : DbContext
     }
 
     /// <summary>
-    /// DbSet to the Direction Class
+    /// Allow pages to access the Directions Class as a service
     /// </summary>
     public virtual DbSet<Direction> Directions { get; set; }
 
