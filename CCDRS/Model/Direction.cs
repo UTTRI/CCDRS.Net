@@ -19,17 +19,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CCDRS.Model;
 /// <summary>
-/// Class that maps to the postgresql direction table
+/// Class that maps to the PostgreSql direction table
 /// </summary>
 public partial class Direction
 {
-    //Id: Primary serial key
+    /// <summary>
+    /// Id is a Primary serial key of type int
+    /// It is auto generated. 
+    /// </summary>
     public int Id { get; set; }
 
-    //Compass: Key that holds the name of direction eg North, South
+    /// <summary>
+    /// Compass string generated of the name of directions eg North, South
+    /// </summary>
     public string Compass { get; set; } = null!;
 
-    //Abbr: An Abbreviation of the direction eg N, E, S, W
-    [Column("Abbrevation")]
+    /// <summary>
+    /// Abbreviation string generated of the abbreviated form of each direction
+    /// Changed the attribute name from Abbr to Abbreviation
+    /// </summary>
+    [Column("Abbreviation")]
     public char Abbr { get; set; }
 }
