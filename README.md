@@ -8,6 +8,6 @@ The 2022 re-implementation of CCDRs
 to be able to login 
 
 ## Development Environment 
-- Developed in visual studio 
-- and a ubuntu 22 virtual machine with WSL2. Note that WSL2 must be
+- Developed in visual studio Version 2022 17.4.0+
+- An ubuntu 22 virtual machine with WSL2. Note that WSL2 must be
 actived for this to work. 
