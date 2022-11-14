@@ -74,6 +74,21 @@ public partial class CCDRSContext : DbContext
             entity.Property(e => e.Name).HasColumnName("name");
         });
 
+        modelBuilder.Entity<VehicleCountType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("vehicle_count_type_pkey");
+
+            entity.ToTable("vehicle_count_type");
+
+            entity.HasIndex(e => new { e.VehicleId, e.Occupancy }, "vehicle_count_type_vehicle_id_occupancy_key").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CountType).HasColumnName("count_type");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Occupancy).HasColumnName("occupancy");
+            entity.Property(e => e.VehicleId).HasColumnName("vehicle_id");
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 
