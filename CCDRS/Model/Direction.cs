@@ -38,6 +38,6 @@ public partial class Direction
     /// Abbreviation string generated of the abbreviated form of each direction
     /// Changed the attribute name from Abbr to Abbreviation
     /// </summary>
-    [Column("Abbreviation")]
-    public char Abbr { get; set; }
+    [Column("Abbr")]
+    public char Abbreviation { get; set; }
 }
