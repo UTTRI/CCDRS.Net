@@ -32,7 +32,7 @@ public partial class Direction
     /// <summary>
     /// Compass string generated of the name of directions eg North, South
     /// </summary>
-    public string Compass { get; set; } = null!;
+    public string Compass { get; set; } = String.Empty;
 
     /// <summary>
     /// Abbreviation string generated of the abbreviated form of each direction

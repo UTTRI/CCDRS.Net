@@ -17,20 +17,22 @@ using System;
 using System.Collections.Generic;
 using CCDRS.Model;
 using Microsoft.EntityFrameworkCore;
-
 namespace CCDRS.Data;
 
-public partial class Ccdrsv1Context : DbContext
+public partial class CCDRSContext : DbContext
 {
-    public Ccdrsv1Context()
+    public CCDRSContext()
     {
     }
 
-    public Ccdrsv1Context(DbContextOptions<Ccdrsv1Context> options)
+    public CCDRSContext(DbContextOptions<CCDRSContext> options)
         : base(options)
     {
     }
 
+    /// <summary>
+    /// DbSet to the Direction Class
+    /// </summary>
     public virtual DbSet<Direction> Directions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
