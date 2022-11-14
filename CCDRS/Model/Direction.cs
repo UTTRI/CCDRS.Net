@@ -19,7 +19,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CCDRS.Model;
 /// <summary>
-/// Class that maps to the PostgreSql direction table
+/// Class that maps to the direction table
 /// </summary>
 public partial class Direction
 {

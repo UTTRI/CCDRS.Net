@@ -19,7 +19,7 @@ using System.Collections.Generic;
 namespace CCDRS.Model;
 
 /// <summary>
-/// Class that maps to the PostgreSql region table
+/// Class that maps to the region table
 /// </summary>
 public partial class Region
 {
@@ -30,7 +30,7 @@ public partial class Region
     public int Id { get; set; }
 
     /// <summary>
-    /// region is string of name of region e.g. Toronto
+    /// Stores the name of the region, e.g. Toronto
     /// </summary>
     public string Name { get; set; } = string.Empty;
 }
