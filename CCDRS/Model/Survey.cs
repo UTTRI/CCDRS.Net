@@ -42,4 +42,9 @@ public partial class Survey
     /// Modify Region Method since survey has a foreign key to region table. 
     /// </summary>
     public virtual Region Region { get; set; } = null!;
+
+    /// <summary>
+    /// Collection of survey_stations associated with survey
+    /// </summary>
+    public virtual ICollection<SurveyStation> SurveyStations { get; } = new List<SurveyStation>();
 }
