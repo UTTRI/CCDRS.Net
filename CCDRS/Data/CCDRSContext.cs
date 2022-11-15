@@ -57,9 +57,7 @@ public partial class CCDRSContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        ///<summary>
-        ///Association of Direction class to direction database attributes
-        /// </summary>
+        // Association of Direction class to direction database attributes
         modelBuilder.Entity<Direction>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("direction_pkey");
@@ -73,9 +71,7 @@ public partial class CCDRSContext : DbContext
             entity.Property(e => e.Compass).HasColumnName("compass");
         });
 
-        ///<summary>
-        ///Association of Region class to region database attributes
-        /// </summary>
+        //Association of Region class to region database attributes
         modelBuilder.Entity<Region>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("region_pkey");
@@ -86,9 +82,7 @@ public partial class CCDRSContext : DbContext
             entity.Property(e => e.Name).HasColumnName("name");
         });
 
-        ///<summary>
-        ///Association of Survey class to survey database attributes
-        /// </summary>
+        //Association of Survey class to survey database attributes
         modelBuilder.Entity<Survey>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("survey_pkey");
@@ -105,9 +99,7 @@ public partial class CCDRSContext : DbContext
                 .HasConstraintName("survey_region_id_fkey");
         });
 
-        ///<summary>
-        ///Association of Vehicle class to vehicle database attributes.
-        /// </summary>
+        //Association of Vehicle class to vehicle database attributes.
         modelBuilder.Entity<Vehicle>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("vehicle_pkey");
@@ -118,9 +110,7 @@ public partial class CCDRSContext : DbContext
             entity.Property(e => e.Name).HasColumnName("name");
         });
 
-        ///<summary>
-        ///Association of VehicleCountType class to vehicle_count_type database attributes.
-        /// </summary>
+        //Association of VehicleCountType class to vehicle_count_type database attributes.
         modelBuilder.Entity<VehicleCountType>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("vehicle_count_type_pkey");
@@ -140,9 +130,6 @@ public partial class CCDRSContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("vehicle_count_type_vehicle_id_fkey");
         });
-
-
-
 
         OnModelCreatingPartial(modelBuilder);
     }
