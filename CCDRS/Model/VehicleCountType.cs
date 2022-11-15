@@ -18,9 +18,6 @@ using System.Collections.Generic;
 
 namespace CCDRS.Model;
 
-/// <summary>
-/// Class that maps to the vehicle_count_type table
-/// </summary>
 public partial class VehicleCountType
 {
     /// <summary>
@@ -36,7 +33,7 @@ public partial class VehicleCountType
     /// <summary>
     /// Foreign key to the vehicle table connected to the vehicle primary key 
     /// </summary>
-    public int? VehicleId { get; set; }
+    public int VehicleId { get; set; }
 
     /// <summary>
     /// Human readable description of the vehicle.

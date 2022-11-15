@@ -31,13 +31,21 @@ public partial class CCDRSContext : DbContext
     }
 
     /// <summary>
-    /// Allow pages to access the Direction Class as a service
+    /// Allow pages to access the Direction class as a service.
     /// </summary>
     public virtual DbSet<Direction> Directions { get; set; }
+
     /// <summary>
-    /// Allow pages to access Region class as a service
+    /// Allow pages to access Region class as a service.
     /// </summary>
     public virtual DbSet<Region> Regions { get; set; }
+
+    /// <summary>
+    /// Allow pages to access VehicleCountType class as a service.
+    /// </summary>
+    public virtual DbSet<VehicleCountType> VehicleCountTypes { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,7 +58,7 @@ public partial class CCDRSContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Abbreviation)
                 .HasMaxLength(1)
-                .HasColumnName("abbr");
+                .HasColumnName("abbreviation");
             entity.Property(e => e.Compass).HasColumnName("compass");
         });
 
