@@ -31,7 +31,7 @@ public partial class Region
     /// <summary>
     /// Stores the name of the region, e.g. Toronto
     /// </summary>
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Collection of surveys associated with the region.
