@@ -146,7 +146,7 @@ namespace CCDRS.Pages
             // If user selects total volume.
             if (trafficVolumeRadioButtonSelect == 1)
             {
-                string x = TotalVolume(startTime,
+                string x = GetTotalVolume(startTime,
                    endTime, DdlStationId,
                  individualCategorySelect, IndividualCategoriesList
                  );
@@ -155,7 +155,7 @@ namespace CCDRS.Pages
             else
             {
                 // user selects fifteen minute interval
-                string x = FifteenMinuteInterval(startTime,
+                string x = GetFifteenMinuteInterval(startTime,
                     endTime, DdlStationId,
                  individualCategorySelect, IndividualCategoriesList
                  );
@@ -172,7 +172,7 @@ namespace CCDRS.Pages
         /// <param name="individualCategorySelect"></param>
         /// <param name="IndividualCategoriesList"></param>
         /// <returns></returns>
-        internal string FifteenMinuteInterval(int startTime,
+        internal string GetFifteenMinuteInterval(int startTime,
             int endTime, int DdlStationId,
             int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList
         )
@@ -239,7 +239,7 @@ namespace CCDRS.Pages
             }
             return builder.ToString();
         }
-        internal string TotalVolume(int startTime, int endTime,
+        internal string GetTotalVolume(int startTime, int endTime,
             int DdlStationId,
             int[] individualCategorySelect,
              IList<IndividualCategory> IndividualCategoriesList
