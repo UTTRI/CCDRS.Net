@@ -1,4 +1,6 @@
+using CCDRS;
 using CCDRS.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,11 +11,14 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<CCDRSContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("TestDBContext") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
 
-
-
-
-
 var app = builder.Build();
+
+// Create the CCDRSContext on project startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CCDRS.Data.CCDRSContext>();
+    Utility.Initialize(dbContext);
+};
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
