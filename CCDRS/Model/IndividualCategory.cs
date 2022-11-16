@@ -26,45 +26,45 @@ public partial class IndividualCategory
     /// <summary>
     /// The name of the Vehicle
     /// </summary>
-    public string? VehicleName { get; set; }
+    public string VehicleName { get; set; }
 
     /// <summary>
     /// The number of occupants that can sit in a vehicle
     /// </summary>
-    public int? Occupancy { get; set; }
+    public int Occupancy { get; set; }
 
     /// <summary>
     /// Human readable description of the vehicle
     /// </summary>
-    public string? Description { get; set; }
+    public string Description { get; set; }
 
     /// <summary>
     /// Foreign key to the vehicle_count_type table associated to the vehicle_count_type primary key attribute.
     /// </summary>
-    public int? VehicleCountTypeId { get; set; }
+    public int VehicleCountTypeId { get; set; }
 
     /// <summary>
     /// Stores the type of vehicle. Used to determine drop down options
     /// </summary>
-    public int? CountyType { get; set; }
+    public int CountType { get; set; }
 
     /// <summary>
     /// Name of the region
     /// </summary>
-    public string? RegionName { get; set; }
+    public string RegionName { get; set; }
 
     /// <summary>
     /// Primary serial key of the rgion
     /// </summary>
-    public int? RegionId { get; set; }
+    public int RegionId { get; set; }
 
     /// <summary>
     /// Year of which the data is selected for
     /// </summary>
-    public int? Year { get; set; }
+    public int Year { get; set; }
 
     /// <summary>
     /// Foreign key to the survey table associated to the survey primary key attribute
     /// </summary>
-    public int? SurveyId { get; set; }
+    public int SurveyId { get; set; }
 }

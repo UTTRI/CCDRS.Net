@@ -1,3 +1,18 @@
+/*
+    Copyright 2022 University of Toronto
+    This file is part of CCDRS.
+    CCDRS is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    CCDRS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with CCDRS.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -43,7 +58,7 @@ namespace CCDRS.Pages
 
         // The year selected by the user.
         [BindProperty(SupportsGet = true)]
-        public int DdlYear { get; set; }
+        public int SelectedSurveyId { get; set; }
 
         /// <summary>
         /// Display the data on page load
@@ -60,7 +75,7 @@ namespace CCDRS.Pages
 
             // local variable to query survey for year
             var ddlYearName = _context.Surveys
-                              .Where(s => s.Id == DdlYear)
+                              .Where(s => s.Id == SelectedSurveyId)
                               .SingleOrDefault();
 
             // bind the local variable to the ViewData to display to the front-end
@@ -91,8 +106,8 @@ namespace CCDRS.Pages
                 VehicleCountTypeList = await (
                                             from s in _context.IndividualCategories
                                             where s.RegionId == RegionId &
-                                                s.SurveyId == DdlYear &
-                                                s.CountyType == 2
+                                                s.SurveyId == SelectedSurveyId &
+                                                s.CountType == 2
                                             orderby s.VehicleName, s.Occupancy
                                             select s
                                            ).ToListAsync();
@@ -101,8 +116,8 @@ namespace CCDRS.Pages
                 PersonCountTypeList = await (
                                             from s in _context.IndividualCategories
                                             where s.RegionId == RegionId &
-                                                s.SurveyId == DdlYear &
-                                                s.CountyType == 3
+                                                s.SurveyId == SelectedSurveyId &
+                                                s.CountType == 3
                                             orderby s.VehicleName, s.Occupancy
                                             select s
                                            ).ToListAsync();
@@ -110,8 +125,8 @@ namespace CCDRS.Pages
                 IndividualCategoriesList = await (
                                             from s in _context.IndividualCategories
                                             where s.RegionId == RegionId &
-                                                s.SurveyId == DdlYear &
-                                                s.CountyType == 1
+                                                s.SurveyId == SelectedSurveyId &
+                                                s.CountType == 1
                                             orderby s.VehicleName, s.Occupancy
                                             select s
                                            ).ToListAsync();
@@ -176,7 +191,7 @@ namespace CCDRS.Pages
                             where
                                 reg.Id == RegionId &
                                 st.Id == DdlStationId &
-                                s.Id == DdlYear &
+                                s.Id == SelectedSurveyId &
                                 sc.Time > startTime & sc.Time <= endTime &
                                 individualCategorySelect.Contains(np.Id)
                             select new
@@ -244,7 +259,7 @@ namespace CCDRS.Pages
                             where
                                 reg.Id == RegionId &
                                 st.Id == DdlStationId &
-                                s.Id == DdlYear &
+                                s.Id == SelectedSurveyId &
                                 sc.Time > startTime & sc.Time <= endTime &
                                 individualCategorySelect.Contains(np.Id)
                             group new { sc, np, st, tech } by new { st.StationCode, tech.Name, np.Occupancy, np.Id }

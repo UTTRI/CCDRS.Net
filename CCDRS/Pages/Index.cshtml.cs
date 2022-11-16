@@ -51,7 +51,7 @@ namespace CCDRS.Pages
 
         //writeable property to store the year of the selected region.
         [BindProperty(SupportsGet = true)]
-        public int DdlYear { get; set; }
+        public int SelectedSurveyId { get; set; }
 
         // run database to return the list of surveys specifically the years associated 
         //with a given region. 
@@ -66,25 +66,25 @@ namespace CCDRS.Pages
         // redirect to the AllStation page
         public IActionResult OnPostAllStation()
         {
-            return RedirectToPage("AllStation", new { DdlYear, regionId });
+            return RedirectToPage("AllStation", new { SelectedSurveyId, regionId });
         }
 
         // redirect to the AllScreenline page
         public IActionResult OnPostAllScreenlines()
         {
-            return RedirectToPage("AllScreenlines", new { DdlYear, regionId });
+            return RedirectToPage("AllScreenlines", new { SelectedSurveyId, regionId });
         }
 
         // redirect to the Specific Station page
         public IActionResult OnPostSpecificStation()
         {
-            return RedirectToPage("SpecificStation", new { DdlYear, regionId });
+            return RedirectToPage("SpecificStation", new { SelectedSurveyId, regionId });
         }
 
         // redirect to the specific screenline page
         public IActionResult OnPostSpecificScreenline()
         {
-            return RedirectToPage("SpecificScreenline", new { DdlYear, regionId });
+            return RedirectToPage("SpecificScreenline", new { SelectedSurveyId, regionId });
         }
     }
 }

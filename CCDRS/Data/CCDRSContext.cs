@@ -273,7 +273,7 @@ public partial class CCDRSContext : DbContext
                 .HasNoKey()
                 .ToView("individual_categories");
 
-            entity.Property(e => e.CountyType).HasColumnName("county_type");
+            entity.Property(e => e.CountType).HasColumnName("count_type");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Occupancy).HasColumnName("occupancy");
             entity.Property(e => e.RegionId).HasColumnName("region_id");
