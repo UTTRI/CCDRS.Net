@@ -60,6 +60,10 @@ namespace CCDRS.Pages
         [BindProperty(SupportsGet = true)]
         public int SelectedSurveyId { get; set; }
 
+        //
+        private const int VehicleCounts = 2;
+        private const int PersonCounts = 3;
+        private const int TechnologyCounts = 1;
         /// <summary>
         /// Display the data on page load
         /// </summary>
@@ -107,7 +111,7 @@ namespace CCDRS.Pages
                                             from s in _context.IndividualCategories
                                             where s.RegionId == RegionId &
                                                 s.SurveyId == SelectedSurveyId &
-                                                s.CountType == 2
+                                                s.CountType == VehicleCounts
                                             orderby s.VehicleName, s.Occupancy
                                             select s
                                            ).ToListAsync();
@@ -117,7 +121,7 @@ namespace CCDRS.Pages
                                             from s in _context.IndividualCategories
                                             where s.RegionId == RegionId &
                                                 s.SurveyId == SelectedSurveyId &
-                                                s.CountType == 3
+                                                s.CountType == PersonCounts
                                             orderby s.VehicleName, s.Occupancy
                                             select s
                                            ).ToListAsync();
@@ -126,7 +130,7 @@ namespace CCDRS.Pages
                                             from s in _context.IndividualCategories
                                             where s.RegionId == RegionId &
                                                 s.SurveyId == SelectedSurveyId &
-                                                s.CountType == 1
+                                                s.CountType == TechnologyCounts
                                             orderby s.VehicleName, s.Occupancy
                                             select s
                                            ).ToListAsync();
@@ -164,7 +168,7 @@ namespace CCDRS.Pages
         }
 
         /// <summary>
-        /// Method to calculate fifteen minute intreval
+        /// Method to calculate fifteen minute interval
         /// </summary>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
