@@ -28,7 +28,7 @@ namespace CCDRS
         /// </summary>
         /// <param name="context">The CCDRS context service</param>
         /// <returns>A list of the query with the id and name and occupancy</returns>
-        private static List<(int id, string name)> GenerateNumofPersonTechIdList(CCDRS.Data.CCDRSContext context)
+        private static List<(int id, string name)> GenerateNumOfPersonTechIdList(CCDRS.Data.CCDRSContext context)
         {
             return (from t in context.Vehicles
                     join np in context.VehicleCountTypes on t.Id equals np.VehicleId
@@ -37,12 +37,17 @@ namespace CCDRS
                         Id = np.Id,
                         Name = t.Name + np.Occupancy
                     })
+                   // The first ToList finishes the logic for EF,
+                   // then we select a value tuple from that since EF can't use ValueTuples
                    .ToList()
                    .Select(x => (x.Id, x.Name))
                    .ToList();
         }
 
-        public static List<(int id, string name)> NumofPersonTechIdList;
+        /// <summary>
+        /// list of tuple containing the id and new name of technology with vehicle and occupancy number
+        /// </summary>
+        public static List<(int id, string name)> NumOfPersonTechIdList;
 
         /// <summary>
         /// Invoke this method to initialize cached data.
@@ -50,7 +55,7 @@ namespace CCDRS
         /// <param name="context">The CCDRS context service</param>
         public static void Initialize(CCDRS.Data.CCDRSContext context)
         {
-            NumofPersonTechIdList = GenerateNumofPersonTechIdList(context);
+            NumOfPersonTechIdList = GenerateNumOfPersonTechIdList(context);
         }
     }
 }
