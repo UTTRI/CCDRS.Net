@@ -18,12 +18,15 @@ using Microsoft.AspNetCore.Builder;
 
 namespace CCDRS
 {
+    /// <summary>
+    /// Contains cached data. Call Initialize before usage.
+    /// </summary>
     public static class Utility
     {
         /// <summary>
         /// Private method to generate a list of vehicles and associated occupancy. 
         /// </summary>
-        /// <param name="context">the CCDRS context service</param>
+        /// <param name="context">The CCDRS context service</param>
         /// <returns>A list of the query with the id and name and occupancy</returns>
         private static List<(int id, string name)> GenerateNumofPersonTechIdList(CCDRS.Data.CCDRSContext context)
         {
@@ -38,7 +41,13 @@ namespace CCDRS
                    .Select(x => (x.Id, x.Name))
                    .ToList();
         }
+
         public static List<(int id, string name)> NumofPersonTechIdList;
+
+        /// <summary>
+        /// Invoke this method to initialize cached data.
+        /// </summary>
+        /// <param name="context">The CCDRS context service</param>
         public static void Initialize(CCDRS.Data.CCDRSContext context)
         {
             NumofPersonTechIdList = GenerateNumofPersonTechIdList(context);
