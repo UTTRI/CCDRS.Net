@@ -32,31 +32,45 @@ namespace CCDRS.Pages
             _context = context;
         }
 
-        // Initialize dropdown list of directions.
+        /// <summary>
+        /// Initialize dropdown list of directions.
+        /// </summary>
         [BindProperty]
         public IList<Direction> DirectionList { get; set; }
-
-        // Initalize list of vehicle count types.
+        
+        /// <summary>
+        /// Initalize list of vehicle count types.
+        /// </summary>
         [BindProperty]
         public IList<IndividualCategory> VehicleCountTypeList { get; set; } = default!;
 
-        //Initialize list of person Count types
+        /// <summary>
+        /// Initialize list of person Count types
+        /// </summary>
         [BindProperty]
         public IList<IndividualCategory> PersonCountTypeList { get; set; } = default!;
 
-        // Initialize list of technologies available.
+        /// <summary>
+        /// Initialize list of technologies available.
+        /// </summary>
         [BindProperty]
         public IList<IndividualCategory> IndividualCategoriesList { get; set; } = default!;
 
-        // Initialize a select list of all stations available for a given region and year.
+        /// <summary>
+        /// Initialize a select list of all stations available for a given region and year.
+        /// </summary>
         public IEnumerable<SelectListItem> StationsSelectList { get; set; } = default!;
 
-        // Set a global default variable to save the variable id this reads the value from the url
-        // The primary key of the selected region
+        /// <summary>
+        /// Set a global default variable to save the variable id this reads the value from the url
+        /// The primary key of the selected region
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public int RegionId { get; set; }
 
-        // The year selected by the user.
+        /// <summary>
+        /// The selected survey.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public int SelectedSurveyId { get; set; }
 
@@ -174,14 +188,14 @@ namespace CCDRS.Pages
         }
 
         /// <summary>
-        /// Method to calculate fifteen minute interval
+        /// Method to calculate the Fifteen Minute Interval
         /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="DdlStationId">the station primary key of the selected station</param>
-        /// <param name="individualCategorySelect"></param>
-        /// <param name="IndividualCategoriesList"></param>
-        /// <returns></returns>
+        /// <param name="startTime">Starting time user requested which is the start of the range</param>
+        /// <param name="endTime">Ending time user requested which is the end of the range</param>
+        /// <param name="DdlStationId">Id of the selected station</param>
+        /// <param name="individualCategorySelect">List of all categories selected by user</param>
+        /// <param name="IndividualCategoriesList">Default list of all categories available for selected survey</param>
+        /// <returns>String representation of the results</returns>
         internal string GetFifteenMinuteInterval(int startTime,
             int endTime, int DdlStationId,
             int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList
@@ -249,6 +263,16 @@ namespace CCDRS.Pages
             }
             return builder.ToString();
         }
+
+        /// <summary>
+        /// Method to calculate the Total Volume
+        /// </summary>
+        /// <param name="startTime">Starting time user requested which is the start of the range</param>
+        /// <param name="endTime">Ending time user requested which is the end of the range</param>
+        /// <param name="DdlStationId">Id of the selected station</param>
+        /// <param name="individualCategorySelect">List of all categories selected by user</param>
+        /// <param name="IndividualCategoriesList">Default list of all categories available for selected survey</param>
+        /// <returns>String representation of the results</returns>
         internal string GetTotalVolume(int startTime, int endTime,
             int DdlStationId,
             int[] individualCategorySelect,
