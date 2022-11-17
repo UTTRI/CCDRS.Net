@@ -95,7 +95,7 @@ namespace CCDRS.Pages
         /// <summary>
         /// Display the data on page load
         /// </summary>
-        /// <returns></returns>
+        /// <returns>the html page with the populated data</returns>
         public async Task OnGetAsync()
         {
             // local variable to query region name
@@ -160,7 +160,7 @@ namespace CCDRS.Pages
         /// <summary>
         /// post method that runs query and generates plain/txt format output
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Redirects user to a text file page with the results</returns>
         public IActionResult OnPostSubmit(
             int startTime, int endTime, int DdlStationId,
             int trafficVolumeRadioButtonSelect,
