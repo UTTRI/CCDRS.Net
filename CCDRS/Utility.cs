@@ -15,6 +15,7 @@
 
 using CCDRS.Model;
 using Microsoft.AspNetCore.Builder;
+using System.Drawing;
 
 namespace CCDRS
 {
@@ -50,12 +51,44 @@ namespace CCDRS
         public static List<(int id, string name)> NumOfPersonTechIdList;
 
         /// <summary>
+        /// List of Directions user may select from. Accessible by other pages
+        /// </summary>
+        public static List<Direction> DirectionUtilityList;
+
+        /// <summary>
+        /// Function to run the database query to return a list of all directions avaiable
+        /// </summary>
+        /// <param name="context">The CCDRSContet service</param>
+        /// <returns>A list of the Direction objects</returns>
+        private static List<Direction> GenerateDirectionList(CCDRS.Data.CCDRSContext context)
+        {
+            return context.Directions.ToList();
+        }
+
+        /// <summary>
+        /// List of IndividualCategory objects
+        /// </summary>
+        public static IList<IndividualCategory> IndividualCategoriesUtilityList;
+
+        /// <summary>
+        /// Method to call the database and run the query and return a list of all rows of individual categories
+        /// </summary>
+        /// <param name="context">The CCDRSContet service</param>
+        /// <returns>A list of IndividualCategory Objects</returns>
+        private static List<IndividualCategory> GenerateIndividualCategorylist(CCDRS.Data.CCDRSContext context)
+        {
+            return context.IndividualCategories.ToList();
+        }
+
+        /// <summary>
         /// Invoke this method to initialize cached data.
         /// </summary>
         /// <param name="context">The CCDRS context service</param>
         public static void Initialize(CCDRS.Data.CCDRSContext context)
         {
             NumOfPersonTechIdList = GenerateNumOfPersonTechIdList(context);
+            DirectionUtilityList = GenerateDirectionList(context);
+            IndividualCategoriesUtilityList = GenerateIndividualCategorylist(context);
         }
     }
 }

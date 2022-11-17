@@ -24,6 +24,11 @@ namespace CCDRS.Model;
 public partial class IndividualCategory
 {
     /// <summary>
+    /// Primary serial key of type int that is auto generated
+    /// </summary>
+    public int Id { get; set; }
+
+    /// <summary>
     /// The name of the Vehicle
     /// </summary>
     public string VehicleName { get; set; }

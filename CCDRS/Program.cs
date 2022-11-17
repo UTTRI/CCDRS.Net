@@ -28,7 +28,7 @@ builder.Services.AddDbContext<CCDRSContext>(options =>
 
 var app = builder.Build();
 
-// Create the CCDRSContext on project startup
+// Create and acquire the CCDRSContext service on project startup
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<CCDRS.Data.CCDRSContext>();

@@ -40,7 +40,7 @@ namespace CCDRS.Pages
         [BindProperty]
         public IList<IndividualCategory> VehicleCountTypeList { get; set; } = default!;
 
-        //initialize list of person Count types
+        //Initialize list of person Count types
         [BindProperty]
         public IList<IndividualCategory> PersonCountTypeList { get; set; } = default!;
 
@@ -60,10 +60,24 @@ namespace CCDRS.Pages
         [BindProperty(SupportsGet = true)]
         public int SelectedSurveyId { get; set; }
 
-        //
+        /// <summary>
+        /// Constant enumerated value for total vehicle counts used to filter the individual
+        /// category table for the radio buttons
+        /// </summary>
         private const int VehicleCounts = 2;
+
+        /// <summary>
+        /// Constant enumerated value for person counts used to filter the individual
+        /// category table for the radio buttons
+        /// </summary>
         private const int PersonCounts = 3;
+
+        /// <summary>
+        /// Constant enumerated value for technologies used to filter the individual
+        /// category table for the radio buttons
+        /// </summary>
         private const int TechnologyCounts = 1;
+
         /// <summary>
         /// Display the data on page load
         /// </summary>
@@ -101,39 +115,31 @@ namespace CCDRS.Pages
             // Query a list of all Directions.
             if (_context.Directions != null)
             {
-                DirectionList = await _context.Directions.ToListAsync();
+                DirectionList = Utility.DirectionUtilityList;
             }
 
             if (_context.IndividualCategories != null)
             {
-                // list of all total vehicle options
-                VehicleCountTypeList = await (
-                                            from s in _context.IndividualCategories
-                                            where s.RegionId == RegionId &
-                                                s.SurveyId == SelectedSurveyId &
-                                                s.CountType == VehicleCounts
-                                            orderby s.VehicleName, s.Occupancy
-                                            select s
-                                           ).ToListAsync();
+                // List all vehicle count list
+                VehicleCountTypeList = Utility.IndividualCategoriesUtilityList.
+                    Where(s => s.RegionId == RegionId &
+                               s.SurveyId == SelectedSurveyId &
+                               s.CountType == VehicleCounts 
+                            ).ToList();
+                
+                // List of all person count list
+                PersonCountTypeList = Utility.IndividualCategoriesUtilityList.
+                    Where(s => s.RegionId == RegionId &
+                               s.SurveyId == SelectedSurveyId &
+                               s.CountType == PersonCounts
+                            ).ToList();
 
-                // list of all person count list
-                PersonCountTypeList = await (
-                                            from s in _context.IndividualCategories
-                                            where s.RegionId == RegionId &
-                                                s.SurveyId == SelectedSurveyId &
-                                                s.CountType == PersonCounts
-                                            orderby s.VehicleName, s.Occupancy
-                                            select s
-                                           ).ToListAsync();
-                //list of all technologies
-                IndividualCategoriesList = await (
-                                            from s in _context.IndividualCategories
-                                            where s.RegionId == RegionId &
-                                                s.SurveyId == SelectedSurveyId &
-                                                s.CountType == TechnologyCounts
-                                            orderby s.VehicleName, s.Occupancy
-                                            select s
-                                           ).ToListAsync();
+                // List of all technologies
+                IndividualCategoriesList = Utility.IndividualCategoriesUtilityList.
+                    Where(s => s.RegionId == RegionId &
+                               s.SurveyId == SelectedSurveyId &
+                               s.CountType == TechnologyCounts
+                            ).ToList();
             }
         }
 
@@ -220,7 +226,7 @@ namespace CCDRS.Pages
             builder.Append("Station,Time");
             foreach (var item in individualCategorySelect)
             {
-                var category = Utility.NumofPersonTechIdList.First(c => c.id == item);
+                var category = Utility.NumOfPersonTechIdList.First(c => c.id == item);
                 builder.Append("," + category.name);
             }
             builder.AppendLine();
@@ -290,7 +296,7 @@ namespace CCDRS.Pages
             builder.Append("Station,startTime,endtime");
             foreach (var item in individualCategorySelect)
             {
-                var category = Utility.NumofPersonTechIdList.First(c => c.id == item);
+                var category = Utility.NumOfPersonTechIdList.First(c => c.id == item);
                 builder.Append("," + category.name);
             }
             builder.AppendLine();

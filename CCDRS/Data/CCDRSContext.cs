@@ -269,10 +269,11 @@ public partial class CCDRSContext : DbContext
         // Association of IndividualCategoryvie to individual_categories attributes.
         modelBuilder.Entity<IndividualCategory>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToView("individual_categories");
+            entity.HasKey(e => e.Id).HasName("individual_categories_pkey");
 
+            entity.ToTable("individual_categories");
+
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CountType).HasColumnName("count_type");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Occupancy).HasColumnName("occupancy");
