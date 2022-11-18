@@ -49,19 +49,19 @@ namespace CCDRS.Pages
         public IList<Direction> DirectionList { get; set; }
 
         /// <summary>
-        /// Initalize list of vehicle count types.
+        /// Initialize list of vehicle count types used to store user selected vehicle count options.
         /// </summary>
         [BindProperty]
         public IList<IndividualCategory> VehicleCountTypeList { get; set; } = default!;
 
         /// <summary>
-        /// Initialize list of person Count types
+        /// Initialize list of person count types used to store user selected person count options.
         /// </summary>
         [BindProperty]
         public IList<IndividualCategory> PersonCountTypeList { get; set; } = default!;
 
         /// <summary>
-        /// Initialize list of technologies available.
+        /// Initialize list of technologies available used to store user selected technologies
         /// </summary>
         [BindProperty]
         public IList<IndividualCategory> IndividualCategoriesList { get; set; } = default!;
