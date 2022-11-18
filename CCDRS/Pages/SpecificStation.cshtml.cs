@@ -18,15 +18,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text;
-
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.RazorPages;
-//using Microsoft.AspNetCore.Mvc.Rendering;
-//using Microsoft.EntityFrameworkCore;
-//using System.Text;
-//using CCDRS.Model;
-//using Microsoft.IdentityModel.Tokens;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CCDRS.Pages
 {
@@ -79,7 +73,7 @@ namespace CCDRS.Pages
         public int RegionId { get; set; }
 
         /// <summary>
-        /// The selected survey.
+        /// The user selected survey id read from the url.
         /// </summary>
         [BindProperty(SupportsGet = true)]
         public int SelectedSurveyId { get; set; }
@@ -88,26 +82,26 @@ namespace CCDRS.Pages
         /// <summary>
         /// Display the data on page load
         /// </summary>
-        /// <returns>the html page with the populated data</returns>
+        /// <returns>The html page with the populated data</returns>
         public async Task OnGetAsync()
         {
-            // local variable to query region name
+            // Query region table to display the region name to the front end.
             var regionName = _context.Regions
                               .Where(r => r.Id == RegionId)
                               .SingleOrDefault();
 
-            // bind the local variable to the ViewData to display to the front-end
+            // Bind the local variable to the ViewData to display to the front-end
             ViewData["RegionName"] = regionName?.Name;
 
-            // local variable to query survey for year
+            // Query survey table to display the survey year to the front end.
             var surveyYear = _context.Surveys
                               .Where(s => s.Id == SelectedSurveyId)
                               .SingleOrDefault();
 
-            // bind the local variable to the ViewData to display to the front-end
+            // Bind the local variable to the ViewData to display to the front-end
             ViewData["SurveyYear"] = surveyYear?.Year;
 
-            // Query a list of all stations associated with a given region.
+            // Query station table to return a list of all stations associated with a given region.
             if (_context.Stations is not null)
             {
                 StationsSelectList = new SelectList((from st in _context.Stations
@@ -120,50 +114,51 @@ namespace CCDRS.Pages
                                                      }), "Id", "Title");
             }
 
-            // Query a list of all Directions.
+            // Query directions table to return direction radiobutton options.
             if (_context.Directions != null)
             {
                 DirectionList = Utility.Directions;
             }
 
+            // Query individual_categories table to return various radiobutton options.
             if (_context.IndividualCategories != null)
             {
-                // List all vehicle count list
+                // List all total vehicle count options
                 VehicleCountTypeList = Utility.GetTotalVehicleCounts(RegionId, SelectedSurveyId);
 
-                // List of all person count list
+                // List all total person count options
                 PersonCountTypeList = Utility.GetTotalPersonCounts(RegionId, SelectedSurveyId);
 
-                // List of all technologies
+                // List all technologies options
                 IndividualCategoriesList =
                     Utility.GetTechnologyCounts(RegionId, SelectedSurveyId);
             }
         }
 
         /// <summary>
-        /// post method that runs query and generates plain/txt format output
+        /// Post method that executes database query to generate plain/txt format output
         /// </summary>
-        /// <returns>Redirects user to a text file page with the results</returns>
+        /// <returns>Redirects user to a text file page with the results from executed query.</returns>
         public IActionResult OnPostSubmit(
-            int startTime, int endTime, int DdlStationId,
+            int startTime, int endTime, int SelectedStationId,
             int trafficVolumeRadioButtonSelect,
             int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList
             )
         {
-            // If user selects total volume.
+            // User selects total volume.
             if (trafficVolumeRadioButtonSelect == 1)
             {
                 string x = GetTotalVolume(startTime,
-                   endTime, DdlStationId,
+                   endTime, SelectedStationId,
                  individualCategorySelect, IndividualCategoriesList
                  );
                 return Content(x);
             }
             else
             {
-                // user selects fifteen minute interval
+                // User selects fifteen minute interval.
                 string x = GetFifteenMinuteInterval(startTime,
-                    endTime, DdlStationId,
+                    endTime, SelectedStationId,
                  individualCategorySelect, IndividualCategoriesList
                  );
                 return Content(x);
@@ -171,41 +166,41 @@ namespace CCDRS.Pages
         }
 
         /// <summary>
-        /// Method to calculate the Fifteen Minute Interval
+        /// Method to calculate the Fifteen Minute Interval results.
         /// </summary>
         /// <param name="startTime">Starting time user requested which is the start of the range</param>
         /// <param name="endTime">Ending time user requested which is the end of the range</param>
-        /// <param name="DdlStationId">Id of the selected station</param>
+        /// <param name="SelectedStationId">User selected Station</param>
         /// <param name="individualCategorySelect">List of all categories selected by user</param>
-        /// <param name="IndividualCategoriesList">Default list of all categories available for selected survey</param>
+        /// <param name="individualCategoriesList">Default list of all categories available for selected survey</param>
         /// <returns>String representation of the results</returns>
         internal string GetFifteenMinuteInterval(int startTime,
-            int endTime, int DdlStationId,
-            int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList
+            int endTime, int SelectedStationId,
+            int[] individualCategorySelect, IList<IndividualCategory> individualCategoriesList
         )
         {
-            //a list of dictionaries
+            // Dictionary of station_count records with a key of the tuple of station code and time and an array of observations. 
             Dictionary<(string stationName, int time), int[]> newlist = new();
 
-            //outputs a list of all stationcount data for all technologies
-            var dataList = (from sc in _context.StationCountObservations
-                            join ss in _context.SurveyStations on sc.SurveyStationId equals ss.Id
-                            join np in _context.VehicleCountTypes on sc.VehicleCountTypeId equals np.Id
-                            join s in _context.Surveys on ss.SurveyId equals s.Id
-                            join st in _context.Stations on ss.StationId equals st.Id
-                            join tech in _context.Vehicles on np.VehicleId equals tech.Id
+            // Executes query and returns all station count data 
+            var dataList = (from stationCounts in _context.StationCountObservations
+                            join surveyStations in _context.SurveyStations on stationCounts.SurveyStationId equals surveyStations.Id
+                            join vehicleCountTypes in _context.VehicleCountTypes on stationCounts.VehicleCountTypeId equals vehicleCountTypes.Id
+                            join surveys in _context.Surveys on surveyStations.SurveyId equals surveys.Id
+                            join stations in _context.Stations on surveyStations.StationId equals stations.Id
+                            join vehicles in _context.Vehicles on vehicleCountTypes.VehicleId equals vehicles.Id
                             where
-                                st.RegionId == RegionId &
-                                st.Id == DdlStationId &
-                                s.Id == SelectedSurveyId &
-                                sc.Time > startTime & sc.Time <= endTime &
-                                individualCategorySelect.Contains(np.Id)
+                                stations.RegionId == RegionId &
+                                stations.Id == SelectedStationId &
+                                surveys.Id == SelectedSurveyId &
+                                stationCounts.Time > startTime & stationCounts.Time <= endTime &
+                                individualCategorySelect.Contains(vehicleCountTypes.Id)
                             select new
                             {
-                                st.StationCode,
-                                Time = sc.Time,
-                                Observations = sc.Observation,
-                                npFKId = np.Id
+                                stations.StationCode,
+                                Time = stationCounts.Time,
+                                Observations = stationCounts.Observation,
+                                npFKId = vehicleCountTypes.Id
                             }
                       );
             foreach (var item in dataList)
@@ -218,7 +213,7 @@ namespace CCDRS.Pages
             }
 
             var builder = new StringBuilder();
-            //building the header with technologies
+            // Build the header
             builder.Append("Station,Time");
             foreach (var item in individualCategorySelect)
             {
@@ -247,44 +242,44 @@ namespace CCDRS.Pages
         }
 
         /// <summary>
-        /// Method to calculate the Total Volume
+        /// Method to calculate the Total Volume results.
         /// </summary>
         /// <param name="startTime">Starting time user requested which is the start of the range</param>
         /// <param name="endTime">Ending time user requested which is the end of the range</param>
-        /// <param name="DdlStationId">Id of the selected station</param>
+        /// <param name="selectedStationId">Id of the selected station</param>
         /// <param name="individualCategorySelect">List of all categories selected by user</param>
         /// <param name="IndividualCategoriesList">Default list of all categories available for selected survey</param>
         /// <returns>String representation of the results</returns>
         internal string GetTotalVolume(int startTime, int endTime,
-            int DdlStationId,
+            int selectedStationId,
             int[] individualCategorySelect,
              IList<IndividualCategory> IndividualCategoriesList
             )
         {
-            //a list of dictionaries
+            // Dictionary of station_count records with a key of station code and an array of observations. 
             Dictionary<string, int[]> newlist = new();
 
-            //outputs a list of all stationcount data for all technologies
-            var dataList = (from sc in _context.StationCountObservations
-                            join ss in _context.SurveyStations on sc.SurveyStationId equals ss.Id
-                            join np in _context.VehicleCountTypes on sc.VehicleCountTypeId equals np.Id
-                            join s in _context.Surveys on ss.SurveyId equals s.Id
-                            join st in _context.Stations on ss.StationId equals st.Id
-                            join tech in _context.Vehicles on np.VehicleId equals tech.Id
+            // Executes query and returns all station count data
+            var dataList = (from stationCounts in _context.StationCountObservations
+                            join surveyStation in _context.SurveyStations on stationCounts.SurveyStationId equals surveyStation.Id
+                            join vehicleCountTypes in _context.VehicleCountTypes on stationCounts.VehicleCountTypeId equals vehicleCountTypes.Id
+                            join surveys in _context.Surveys on surveyStation.SurveyId equals surveys.Id
+                            join stations in _context.Stations on surveyStation.StationId equals stations.Id
+                            join vehicles in _context.Vehicles on vehicleCountTypes.VehicleId equals vehicles.Id
                             where
-                                st.RegionId == RegionId &
-                                st.Id == DdlStationId &
-                                s.Id == SelectedSurveyId &
-                                sc.Time > startTime & sc.Time <= endTime &
-                                individualCategorySelect.Contains(np.Id)
-                            group new { sc, np, st, tech } by new { st.StationCode, tech.Name, np.Occupancy, np.Id }
-                            into newgrp
+                                stations.RegionId == RegionId &
+                                stations.Id == selectedStationId &
+                                surveys.Id == SelectedSurveyId &
+                                stationCounts.Time > startTime & stationCounts.Time <= endTime &
+                                individualCategorySelect.Contains(vehicleCountTypes.Id)
+                            group new { stationCounts, vehicleCountTypes, stations, vehicles } by new { stations.StationCode, vehicles.Name, vehicleCountTypes.Occupancy, vehicleCountTypes.Id }
+                            into groupedBystationCountObservations
                             select new
                             {
-                                Station = newgrp.Key.StationCode,
-                                Observations = newgrp.Sum(x => x.sc.Observation),
-                                npFKId = newgrp.Key.Id,
-                                newgrp.Key.Occupancy
+                                Station = groupedBystationCountObservations.Key.StationCode,
+                                Observations = groupedBystationCountObservations.Sum(x => x.stationCounts.Observation),
+                                npFKId = groupedBystationCountObservations.Key.Id,
+                                groupedBystationCountObservations.Key.Occupancy
                             }
                       );
             foreach (var item in dataList)
@@ -297,8 +292,8 @@ namespace CCDRS.Pages
             }
 
             var builder = new StringBuilder();
-            //building the header with technologies
-            builder.Append("Station,startTime,endtime");
+            // Build the header
+            builder.Append("Station,startTime,endTime");
             foreach (var item in individualCategorySelect)
             {
                 var category = Utility.TechnologyNames.First(c => c.id == item);

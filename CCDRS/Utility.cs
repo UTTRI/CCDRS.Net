@@ -46,12 +46,12 @@ namespace CCDRS
         /// <summary>
         /// List of tuple containing the id and new name of technology with vehicle and occupancy number
         /// </summary>
-        public static List<(int id, string name)> TechnologyNames;
+        public static List<(int id, string name)> TechnologyNames { get; private set; }
 
         /// <summary>
         /// List of Directions user may select from. Accessible by other pages
         /// </summary>
-        public static List<Direction> Directions;
+        public static List<Direction> Directions { get; private set; }
 
         /// <summary>
         /// Function to run the database query to return a list of all directions available
@@ -66,7 +66,7 @@ namespace CCDRS
         /// <summary>
         /// List of IndividualCategory objects
         /// </summary>
-        public static IList<IndividualCategory> IndividualCategories;
+        public static IList<IndividualCategory> IndividualCategories { get; private set; }
 
         /// <summary>
         /// Method to call the database and run the query and return a list of all rows of individual categories

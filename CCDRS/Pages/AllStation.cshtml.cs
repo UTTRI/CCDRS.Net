@@ -73,7 +73,7 @@ namespace CCDRS.Pages
         /// <summary>
         /// Display the data on page load
         /// </summary>
-        /// <returns>the html page with the populated data</returns>
+        /// <returns>The html page with the populated data</returns>
         public async Task OnGetAsync()
         {
             // Query region table to display the region name to the front end.
@@ -92,13 +92,13 @@ namespace CCDRS.Pages
             // Bind the local variable to the ViewData to display to the front-end
             ViewData["SurveyYear"] = surveyYear?.Year;
 
-            // Query directions table to produce direction radiobutton options.
+            // Query directions table to return direction radiobutton options.
             if (_context.Directions != null)
             {
                 DirectionList = Utility.Directions;
             }
 
-            //Query individual_categories table to produce various radiobutton options.
+            // Query individual_categories table to return various radiobutton options.
             if (_context.IndividualCategories != null)
             {
                 // List all total vehicle count options
@@ -134,7 +134,7 @@ namespace CCDRS.Pages
             }
             else
             {
-                // Uer selects fifteen minute interval.
+                // User selects fifteen minute interval.
                 string queryResult = GetFifteenMinuteInterval(directionCountSelect,
                  individualCategorySelect, individualCategoriesList,
                  startTime, endTime
