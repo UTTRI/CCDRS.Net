@@ -181,10 +181,9 @@ namespace CCDRS.Pages
                             join np in _context.VehicleCountTypes on sc.VehicleCountTypeId equals np.Id
                             join s in _context.Surveys on ss.SurveyId equals s.Id
                             join st in _context.Stations on ss.StationId equals st.Id
-                            join reg in _context.Regions on st.RegionId equals reg.Id
                             join tech in _context.Vehicles on np.VehicleId equals tech.Id
                             where
-                                reg.Id == RegionId &
+                                st.RegionId == RegionId &
                                 directionCountSelect.Contains((char)st.Direction!) &
                                 s.Id == SelectedSurveyId &
                                 sc.Time >= startTime & sc.Time <= endTime &
@@ -257,10 +256,9 @@ namespace CCDRS.Pages
                             join np in _context.VehicleCountTypes on sc.VehicleCountTypeId equals np.Id
                             join s in _context.Surveys on ss.SurveyId equals s.Id
                             join st in _context.Stations on ss.StationId equals st.Id
-                            join reg in _context.Regions on st.RegionId equals reg.Id
                             join tech in _context.Vehicles on np.VehicleId equals tech.Id
                             where
-                                reg.Id == RegionId &
+                                st.RegionId == RegionId &
                                 directionCountSelect.Contains((char)st.Direction!) &
                                 s.Id == SelectedSurveyId &
                                 sc.Time >= startTime & sc.Time <= endTime &
