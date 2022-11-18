@@ -106,12 +106,12 @@ namespace CCDRS.Pages
             ViewData["RegionName"] = regionName.Name;
 
             // local variable to query survey for year
-            var ddlYearName = _context.Surveys
+            var SurveyYear = _context.Surveys
                               .Where(s => s.Id == SelectedSurveyId)
                               .SingleOrDefault();
 
             // bind the local variable to the ViewData to display to the front-end
-            ViewData["DdlYearId"] = ddlYearName.Year;
+            ViewData["SurveyYear"] = SurveyYear.Year;
 
             // Query a list of all stations associated with a given region.
             if (_context.Stations is not null)
@@ -135,25 +135,14 @@ namespace CCDRS.Pages
             if (_context.IndividualCategories != null)
             {
                 // List all vehicle count list
-                VehicleCountTypeList = Utility.IndividualCategoriesUtilityList.
-                    Where(s => s.RegionId == RegionId &
-                               s.SurveyId == SelectedSurveyId &
-                               s.CountType == VehicleCounts 
-                            ).ToList();
-                
+                VehicleCountTypeList = Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, VehicleCounts);
+
                 // List of all person count list
-                PersonCountTypeList = Utility.IndividualCategoriesUtilityList.
-                    Where(s => s.RegionId == RegionId &
-                               s.SurveyId == SelectedSurveyId &
-                               s.CountType == PersonCounts
-                            ).ToList();
+                PersonCountTypeList = Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, PersonCounts);
 
                 // List of all technologies
-                IndividualCategoriesList = Utility.IndividualCategoriesUtilityList.
-                    Where(s => s.RegionId == RegionId &
-                               s.SurveyId == SelectedSurveyId &
-                               s.CountType == TechnologyCounts
-                            ).ToList();
+                IndividualCategoriesList =
+                    Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, TechnologyCounts);
             }
         }
 

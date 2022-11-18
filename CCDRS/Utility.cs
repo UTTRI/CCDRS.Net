@@ -14,6 +14,7 @@
 */
 
 using CCDRS.Model;
+using MessagePack;
 using Microsoft.AspNetCore.Builder;
 using System.Drawing;
 
@@ -89,6 +90,27 @@ namespace CCDRS
             NumOfPersonTechIdList = GenerateNumOfPersonTechIdList(context);
             DirectionUtilityList = GenerateDirectionList(context);
             IndividualCategoriesUtilityList = GenerateIndividualCategorylist(context);
+        }
+
+        /// <summary>
+        /// List of all filtered Individual Categories based on selected year, survey and count type
+        /// </summary>
+        public static IList<IndividualCategory> IndividualCategoryResultList;
+
+        /// <summary>
+        /// Method to query the individual_category table and return the filtered technologies
+        /// </summary>
+        /// <param name="RegionId">The selected region. This is the region primary key.</param>
+        /// <param name="SelectedSurveyId">Selected survey which is the survey primary key.</param>
+        /// <param name="VehicleCounts">Enumeration to determine the type of vehicle</param>
+        /// <returns>a filtered list of Individual Categories </returns>
+        public static IList<IndividualCategory> GetSpecificTechnologyList(int RegionId, int SelectedSurveyId, int VehicleCounts)
+        {
+            IndividualCategoryResultList = IndividualCategoriesUtilityList.Where(s => s.RegionId == RegionId &
+                               s.SurveyId == SelectedSurveyId &
+                               s.CountType == VehicleCounts
+                            ).ToList();
+            return IndividualCategoryResultList;
         }
     }
 }
