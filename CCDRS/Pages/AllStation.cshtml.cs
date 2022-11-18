@@ -70,24 +70,6 @@ namespace CCDRS.Pages
         public int SelectedSurveyId { get; set; }
 
         /// <summary>
-        /// Constant enumerated value for total vehicle counts used to filter the individual
-        /// category table for the radio buttons
-        /// </summary>
-        private const int VehicleCounts = 2;
-
-        /// <summary>
-        /// Constant enumerated value for person counts used to filter the individual
-        /// category table for the radio buttons
-        /// </summary>
-        private const int PersonCounts = 3;
-
-        /// <summary>
-        /// Constant enumerated value for technologies used to filter the individual
-        /// category table for the radio buttons
-        /// </summary>
-        private const int TechnologyCounts = 1;
-
-        /// <summary>
         /// Display the data on page load
         /// </summary>
         /// <returns>the html page with the populated data</returns>
@@ -117,14 +99,13 @@ namespace CCDRS.Pages
             if (_context.IndividualCategories != null)
             {
                 // List all vehicle count list
-                VehicleCountTypeList = Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, VehicleCounts);
+                VehicleCountTypeList = Utility.GetTotalVehicleCountList(RegionId, SelectedSurveyId);
 
                 // List of all person count list
-                PersonCountTypeList = Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, PersonCounts);
+                PersonCountTypeList = Utility.GetTotalPersonCountList(RegionId, SelectedSurveyId);
                 
                 // List of all technologies
-                IndividualCategoriesList = 
-                    Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, TechnologyCounts);
+                IndividualCategoriesList = Utility.GetTechnologyCountList(RegionId, SelectedSurveyId);
             }
         }
 
@@ -136,14 +117,14 @@ namespace CCDRS.Pages
             char[] directionCountSelect,
             int startTime, int endTime,
             int trafficVolumeRadioButtonSelect,
-            int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList
+            int[] individualCategorySelect, IList<IndividualCategory> individualCategoriesList
             )
         {
             // If user selects total volume.
             if (trafficVolumeRadioButtonSelect == 1)
             {
                 string x = GetTotalVolume(directionCountSelect,
-                 individualCategorySelect, IndividualCategoriesList,
+                 individualCategorySelect, individualCategoriesList,
                  startTime, endTime
                  );
                 return Content(x);
@@ -152,7 +133,7 @@ namespace CCDRS.Pages
             {
                 // user selects fifteen minute interval
                 string x = GetFifteenMinuteInterval(directionCountSelect,
-                 individualCategorySelect, IndividualCategoriesList,
+                 individualCategorySelect, individualCategoriesList,
                  startTime, endTime
                  );
                 return Content(x);
@@ -166,10 +147,10 @@ namespace CCDRS.Pages
         /// <param name="endTime">Ending time user requested which is the end of the range</param>
         /// <param name="DdlStationId">Id of the selected station</param>
         /// <param name="individualCategorySelect">List of all categories selected by user</param>
-        /// <param name="IndividualCategoriesList">Default list of all categories available for selected survey</param>
+        /// <param name="individualCategoriesList">Default list of all categories available for selected survey</param>
         /// <returns>String representation of the results</returns>
         internal string GetFifteenMinuteInterval(char[] directionCountSelect,
-            int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList,
+            int[] individualCategorySelect, IList<IndividualCategory> individualCategoriesList,
             int startTime, int endTime)
         {
             //a list of dictionaries
@@ -241,10 +222,10 @@ namespace CCDRS.Pages
         /// <param name="endTime">Ending time user requested which is the end of the range</param>
         /// <param name="DdlStationId">Id of the selected station</param>
         /// <param name="individualCategorySelect">List of all categories selected by user</param>
-        /// <param name="IndividualCategoriesList">Default list of all categories available for selected survey</param>
+        /// <param name="individualCategoriesList">Default list of all categories available for selected survey</param>
         /// <returns>String representation of the results</returns>
         internal string GetTotalVolume(char[] directionCountSelect,
-            int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList,
+            int[] individualCategorySelect, IList<IndividualCategory> individualCategoriesList,
             int startTime, int endTime)
         {
             //a list of dictionaries

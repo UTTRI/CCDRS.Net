@@ -74,24 +74,7 @@ namespace CCDRS.Pages
         [BindProperty(SupportsGet = true)]
         public int SelectedSurveyId { get; set; }
 
-        /// <summary>
-        /// Constant enumerated value for total vehicle counts used to filter the individual
-        /// category table for the radio buttons
-        /// </summary>
-        private const int VehicleCounts = 2;
-
-        /// <summary>
-        /// Constant enumerated value for person counts used to filter the individual
-        /// category table for the radio buttons
-        /// </summary>
-        private const int PersonCounts = 3;
-
-        /// <summary>
-        /// Constant enumerated value for technologies used to filter the individual
-        /// category table for the radio buttons
-        /// </summary>
-        private const int TechnologyCounts = 1;
-
+        
         /// <summary>
         /// Display the data on page load
         /// </summary>
@@ -135,14 +118,14 @@ namespace CCDRS.Pages
             if (_context.IndividualCategories != null)
             {
                 // List all vehicle count list
-                VehicleCountTypeList = Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, VehicleCounts);
+                VehicleCountTypeList = Utility.GetTotalVehicleCountList(RegionId, SelectedSurveyId);
 
                 // List of all person count list
-                PersonCountTypeList = Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, PersonCounts);
+                PersonCountTypeList = Utility.GetTotalPersonCountList(RegionId, SelectedSurveyId);
 
                 // List of all technologies
                 IndividualCategoriesList =
-                    Utility.GetSpecificTechnologyList(RegionId, SelectedSurveyId, TechnologyCounts);
+                    Utility.GetTechnologyCountList(RegionId, SelectedSurveyId);
             }
         }
 

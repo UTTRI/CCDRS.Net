@@ -92,25 +92,58 @@ namespace CCDRS
             IndividualCategoriesUtilityList = GenerateIndividualCategorylist(context);
         }
 
+
+
+
+
         /// <summary>
-        /// List of all filtered Individual Categories based on selected year, survey and count type
+        /// Constant enumerated value for total vehicle counts used to filter the individual
+        /// category table for the radio buttons
         /// </summary>
-        public static IList<IndividualCategory> IndividualCategoryResultList;
+        private const int VehicleCounts = 2;
+
+        /// <summary>
+        /// Constant enumerated value for person counts used to filter the individual
+        /// category table for the radio buttons
+        /// </summary>
+        private const int PersonCounts = 3;
+
+        /// <summary>
+        /// Constant enumerated value for technologies used to filter the individual
+        /// category table for the radio buttons
+        /// </summary>
+        private const int TechnologyCounts = 1;
+
+
+        public static IList<IndividualCategory> GetTotalVehicleCountList(int regionId, int selectedSurveyId)
+        {
+            return GetSpecificTechnologyList(regionId, selectedSurveyId, VehicleCounts);
+
+        }
+
+        public static IList<IndividualCategory> GetTotalPersonCountList(int regionId, int selectedSurveyId)
+        {
+            return GetSpecificTechnologyList(regionId, selectedSurveyId, PersonCounts);
+        }
+
+        public static IList<IndividualCategory> GetTechnologyCountList(int regionId, int selectedSurveyId)
+        {
+            return GetSpecificTechnologyList(regionId, selectedSurveyId, TechnologyCounts);
+        }
 
         /// <summary>
         /// Method to query the individual_category table and return the filtered technologies
         /// </summary>
-        /// <param name="RegionId">The selected region. This is the region primary key.</param>
-        /// <param name="SelectedSurveyId">Selected survey which is the survey primary key.</param>
+        /// <param name="regionId">The selected region. This is the region primary key.</param>
+        /// <param name="selectedSurveyId">Selected survey which is the survey primary key.</param>
         /// <param name="VehicleCounts">Enumeration to determine the type of vehicle</param>
         /// <returns>a filtered list of Individual Categories </returns>
-        public static IList<IndividualCategory> GetSpecificTechnologyList(int RegionId, int SelectedSurveyId, int VehicleCounts)
+        private static IList<IndividualCategory> GetSpecificTechnologyList(int regionId, int selectedSurveyId, int countType)
         {
-            IndividualCategoryResultList = IndividualCategoriesUtilityList.Where(s => s.RegionId == RegionId &
-                               s.SurveyId == SelectedSurveyId &
-                               s.CountType == VehicleCounts
+            return IndividualCategoriesUtilityList.Where(s => s.RegionId == regionId &
+                               s.SurveyId == selectedSurveyId &
+                               s.CountType == countType
                             ).ToList();
-            return IndividualCategoryResultList;
         }
     }
 }
