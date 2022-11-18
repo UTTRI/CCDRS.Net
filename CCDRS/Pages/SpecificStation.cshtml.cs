@@ -13,16 +13,26 @@
     along with CCDRS.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using CCDRS.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-using CCDRS.Model;
-using Microsoft.IdentityModel.Tokens;
+
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc.RazorPages;
+//using Microsoft.AspNetCore.Mvc.Rendering;
+//using Microsoft.EntityFrameworkCore;
+//using System.Text;
+//using CCDRS.Model;
+//using Microsoft.IdentityModel.Tokens;
 
 namespace CCDRS.Pages
 {
+    /// <summary>
+    /// Class to display the data for the Specific Station page.
+    /// </summary>
     public class SpecificStationModel : PageModel
     {
         private readonly CCDRS.Data.CCDRSContext _context;
@@ -33,11 +43,11 @@ namespace CCDRS.Pages
         }
 
         /// <summary>
-        /// Initialize dropdown list of directions.
+        /// Initialize dropdown list of directions used to store user selected directions.
         /// </summary>
         [BindProperty]
         public IList<Direction> DirectionList { get; set; }
-        
+
         /// <summary>
         /// Initalize list of vehicle count types.
         /// </summary>
@@ -74,7 +84,7 @@ namespace CCDRS.Pages
         [BindProperty(SupportsGet = true)]
         public int SelectedSurveyId { get; set; }
 
-        
+
         /// <summary>
         /// Display the data on page load
         /// </summary>
@@ -85,16 +95,17 @@ namespace CCDRS.Pages
             var regionName = _context.Regions
                               .Where(r => r.Id == RegionId)
                               .SingleOrDefault();
+
             // bind the local variable to the ViewData to display to the front-end
-            ViewData["RegionName"] = regionName.Name;
+            ViewData["RegionName"] = regionName?.Name;
 
             // local variable to query survey for year
-            var SurveyYear = _context.Surveys
+            var surveyYear = _context.Surveys
                               .Where(s => s.Id == SelectedSurveyId)
                               .SingleOrDefault();
 
             // bind the local variable to the ViewData to display to the front-end
-            ViewData["SurveyYear"] = SurveyYear.Year;
+            ViewData["SurveyYear"] = surveyYear?.Year;
 
             // Query a list of all stations associated with a given region.
             if (_context.Stations is not null)
@@ -112,20 +123,20 @@ namespace CCDRS.Pages
             // Query a list of all Directions.
             if (_context.Directions != null)
             {
-                DirectionList = Utility.DirectionUtilityList;
+                DirectionList = Utility.Directions;
             }
 
             if (_context.IndividualCategories != null)
             {
                 // List all vehicle count list
-                VehicleCountTypeList = Utility.GetTotalVehicleCountList(RegionId, SelectedSurveyId);
+                VehicleCountTypeList = Utility.GetTotalVehicleCounts(RegionId, SelectedSurveyId);
 
                 // List of all person count list
-                PersonCountTypeList = Utility.GetTotalPersonCountList(RegionId, SelectedSurveyId);
+                PersonCountTypeList = Utility.GetTotalPersonCounts(RegionId, SelectedSurveyId);
 
                 // List of all technologies
                 IndividualCategoriesList =
-                    Utility.GetTechnologyCountList(RegionId, SelectedSurveyId);
+                    Utility.GetTechnologyCounts(RegionId, SelectedSurveyId);
             }
         }
 
@@ -211,7 +222,7 @@ namespace CCDRS.Pages
             builder.Append("Station,Time");
             foreach (var item in individualCategorySelect)
             {
-                var category = Utility.NumOfPersonTechIdList.First(c => c.id == item);
+                var category = Utility.TechnologyNames.First(c => c.id == item);
                 builder.Append("," + category.name);
             }
             builder.AppendLine();
@@ -290,7 +301,7 @@ namespace CCDRS.Pages
             builder.Append("Station,startTime,endtime");
             foreach (var item in individualCategorySelect)
             {
-                var category = Utility.NumOfPersonTechIdList.First(c => c.id == item);
+                var category = Utility.TechnologyNames.First(c => c.id == item);
                 builder.Append("," + category.name);
             }
             builder.AppendLine();
