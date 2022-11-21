@@ -39,15 +39,3 @@ public partial class ScreenlineStation
     /// </summary>
     public virtual Station Station { get; set; } = null!;
 }
-
-//{
-
-//    //public class Screenlinestation
-//    //{
-//    //    public int? ScreenlineId { get; set; }
-//    //    public int? StationId { get; set; }
-
-//    //    public virtual Screenline? Screenline { get; set; }
-//    //    public virtual Station? Station { get; set; }
-//    //}
-//}
