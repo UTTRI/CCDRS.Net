@@ -174,7 +174,7 @@ namespace CCDRS.Pages
                              join vehicle in _context.Vehicles on vehicleCountType.VehicleId equals vehicle.Id
                              join station in _context.Stations on surveystation.StationId equals station.Id
                              join survey in _context.Surveys on surveystation.SurveyId equals survey.Id
-                             join screenlinestation in _context.Screenlinestations on station.Id equals screenlinestation.StationId
+                             join screenlinestation in _context.ScreenlineStations on station.Id equals screenlinestation.StationId
                              join screenline in _context.Screenlines on screenlinestation.ScreenlineId equals screenline.Id
                              where screenline.Id == SelectedScreenlineId
                                 && individualCategorySelect.Contains(vehicleCountType.Id)
@@ -186,20 +186,20 @@ namespace CCDRS.Pages
                              into newgrp
                              select new
                              {
-                                 slineCode = newgrp.Key.SlineCode, 
-                                 time = newgrp.Key.Time,
-                                 direction = newgrp.Key.Direction,
+                                 SlineCode = newgrp.Key.SlineCode, 
+                                 Time = newgrp.Key.Time,
+                                 Direction = newgrp.Key.Direction,
                                  Observations = newgrp.Sum(x => x.stationcount.Observation),
-                                 npFKId = newgrp.Key.Id,
+                                 VehicleCountTypeId = newgrp.Key.Id,
                              }
                           );
             foreach (var item in dataList)
             {
-                if (!newlist.TryGetValue((item.slineCode, item.time, item.direction), out var counts))
+                if (!newlist.TryGetValue((item.SlineCode, item.Time, item.Direction), out var counts))
                 {
-                    newlist[(item.slineCode, item.time, item.direction)] = counts = new int[individualCategorySelect.Length];
+                    newlist[(item.SlineCode, item.Time, item.Direction)] = counts = new int[individualCategorySelect.Length];
                 }
-                counts[Array.IndexOf(individualCategorySelect, item.npFKId)] += item.Observations;
+                counts[Array.IndexOf(individualCategorySelect, item.VehicleCountTypeId)] += item.Observations;
             }
 
             var builder = new StringBuilder();
@@ -257,7 +257,7 @@ namespace CCDRS.Pages
                             join vehicle in _context.Vehicles on vehiclecount.VehicleId equals vehicle.Id
                             join survey in _context.Surveys on stationsurvey.SurveyId equals survey.Id
                             join station in _context.Stations on stationsurvey.StationId equals station.Id
-                            join screenlinestation in _context.Screenlinestations on station.Id equals screenlinestation.StationId
+                            join screenlinestation in _context.ScreenlineStations on station.Id equals screenlinestation.StationId
                             join screenline in _context.Screenlines on screenlinestation.ScreenlineId equals screenline.Id
                             where
                                 screenline.RegionId == RegionId
@@ -271,19 +271,19 @@ namespace CCDRS.Pages
                             into grp
                             select new
                             {
-                                slinecode = grp.Key.SlineCode,
-                                observations = grp.Sum(x => x.stationcount.Observation),
-                                npfkid = grp.Key.Id,
-                                direction = grp.Key.Direction
+                                SlineCode = grp.Key.SlineCode,
+                                Observations = grp.Sum(x => x.stationcount.Observation),
+                                VehicleCountTypeId = grp.Key.Id,
+                                Direction = grp.Key.Direction
                             }
                       );
             foreach (var item in datalist)
             {
-                if (!newlist.TryGetValue((item.slinecode, item.direction), out var counts))
+                if (!newlist.TryGetValue((item.SlineCode, item.Direction), out var counts))
                 {
-                    newlist[(item.slinecode, item.direction)] = counts = new int[individualCategorySelect.Length];
+                    newlist[(item.SlineCode, item.Direction)] = counts = new int[individualCategorySelect.Length];
                 }
-                counts[Array.IndexOf(individualCategorySelect, item.npfkid)] += item.observations;
+                counts[Array.IndexOf(individualCategorySelect, item.VehicleCountTypeId)] += item.Observations;
             }
 
             var builder = new StringBuilder();

@@ -18,7 +18,7 @@ namespace CCDRS.Model;
 /// <summary>
 /// Class that maps to the screenline_station table
 /// </summary>
-public partial class Screenlinestation
+public partial class ScreenlineStation
 {
     /// <summary>
     /// Foreign key to the screenline table associated to the screenline primary key attribute
@@ -33,11 +33,11 @@ public partial class Screenlinestation
     /// <summary>
     ///  Modify Screenline Class.
     /// </summary>
-    public virtual Screenline? Screenline { get; set; }
+    public virtual Screenline Screenline { get; set; } = null!;
     /// <summary>
     /// Modify Station class.
     /// </summary>
-    public virtual Station? Station { get; set; }
+    public virtual Station Station { get; set; } = null!;
 }
 
 //{
