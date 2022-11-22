@@ -142,7 +142,7 @@ namespace CCDRS.Pages
         public IActionResult OnPostSubmit(
             int startTime, int endTime, int SelectedStationId,
             int trafficVolumeRadioButtonSelect,
-            int[] individualCategorySelect, IList<IndividualCategory> IndividualCategoriesList
+            int[] individualCategorySelect, IList<IndividualCategory> individualCategoriesList
             )
         {
             // User selects total volume.
@@ -150,7 +150,7 @@ namespace CCDRS.Pages
             {
                 string x = GetTotalVolume(startTime,
                    endTime, SelectedStationId,
-                 individualCategorySelect, IndividualCategoriesList
+                 individualCategorySelect, individualCategoriesList
                  );
                 return Content(x);
             }
@@ -159,7 +159,7 @@ namespace CCDRS.Pages
                 // User selects fifteen minute interval.
                 string x = GetFifteenMinuteInterval(startTime,
                     endTime, SelectedStationId,
-                 individualCategorySelect, IndividualCategoriesList
+                 individualCategorySelect, individualCategoriesList
                  );
                 return Content(x);
             }
