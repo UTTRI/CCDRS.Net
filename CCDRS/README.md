@@ -127,6 +127,16 @@ The database scripts are linux basch scrpits that are responsible for destroying
 and rebuilding the database from scratch.
 The files are located in the CCDRS folder. 
 
+The main file is called `CreateDatabase.sh` which performs the following actions 
+1. cleans and deletes all tables in the database
+1. rebuild the table schemas using the create table command
+1. insert data back into the tables. This is done by either inserting table directly 
+or creating temporary tables read from csv or txt files and then insert the data 
+into the original table
+1. database cleanup, typically deleting all temporary tables that were created. 
+
+For screenline data,  
+
 ## Database Architecture
 
 
