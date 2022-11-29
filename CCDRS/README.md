@@ -1,7 +1,9 @@
 # CCDRS.Net
+
 The 2022 re-implementation of CCDRs
 
 # Building CCDRS
+
 - Visual Studio 2022 with 17.4.0+
 - PostgreSQL version 14: We use the relational database PostgreSQL to store the data
 - PgAdmin: A windows GUI application tool that can connect to PostgreSQL. A useful tool to run queries and see the table relationships and displays errors, an alternative to writing queries in a terminal. 
@@ -11,6 +13,7 @@ The 2022 re-implementation of CCDRs
  
 
 ## Setting up Development Environment 
+
 Note that these instructions are for setting up the system in Windows 10.
 
 ---
@@ -31,10 +34,12 @@ use ==/mnt/c==.
 
 ---
 ### Install and Setup PostgreSQL
+
 Follow the links to install the latest version of PostgreSQL on the Ubuntu 22 system
 https://www.postgresql.org/download/linux/ubuntu/
 
 #### Start and check PostgreSQL
+
 Check the status of PostgreSQL to see if the PostgreSQL service is enabled and active
 `sudo service postgresql status`
 
@@ -44,6 +49,7 @@ enable and start the service:
 `sudo service postgresql start`
 
 #### Change PostgreSQL user password
+
 By default, PostgreSQL comes with a default admin user account called postgres however a password needs to be assigned to the default user.
 This is required otherwise the Asp Net core connection strings which connect to the database will fail to work. 
 - In your Linux terminal run the command `sudo -i -u postgres` to switch to the postgres account
@@ -54,11 +60,13 @@ This is required otherwise the Asp Net core connection strings which connect to 
 - Exit the psql client by writing `\q` in the terminal. 
 
 #### Install PgAdmin
+
 Go to the main site of PgAdmin https://www.pgadmin.org/ and under the Download section download the version of PgAdmin required.
 https://www.pgadmin.org/download/
 
 ---
 ### Install and setup MongoDB
+
  MongoDB is being used for user authentication. This database stores the username and password and setup similar to the production system currently being 
  used and implemented. This step is required if the developer is working on code associated with user authentication otherwise
  it can be skipped. 
@@ -67,6 +75,7 @@ https://www.pgadmin.org/download/
  https://www.MongoDB.com/docs/manual/tutorial/install-MongoDB-on-ubuntu/
 
 #### Start and check MongoDB Service
+
  - run the command `$ sudo service MongoDB status` to check the status of the service
  - if it displays ` * Checking status of database MongoDB  [fail]` enable the service
  - run the command `sudo service MongoDB start` to enable the PostgreSQL service 
@@ -74,6 +83,7 @@ https://www.pgadmin.org/download/
  - Open a second Ubuntu terminal and type in `mongo` to access the mongo shell
  
 #### Access Mongo shell to create database and single user entry
+
  - We need to create one database. inside the opened mongo shell type `use myshinynewdb` where myshinynewdb is the name
  of the database you wish to use. In the development environment it is called myshinynewdb.
  - Now create a collection with the single data entry of the username and password. This information will be 
@@ -90,6 +100,7 @@ You may need to restart the mongo service `sudo service MongoDB restart` to see 
 
 ---
 ### Setup Solution to run the project
+
 1. Git clone the repo and open it in Visual Studio. 
 1. Right click on the project label CCDRS and click on the setting **Manager User Secrets**
     1. User secrets is a file where database connection strings can be safely stored and not publicly shared without being displayed to users or pushed to GitHub
@@ -125,6 +136,7 @@ is disabled on these pages.
 `
 
 ## Setting up Production Environment
+
 - using Visual studio publish the project using the following settings:
 - Target Framework: net 7.0
 - Deployment mode: self-contained
@@ -135,6 +147,7 @@ is disabled on these pages.
 
 
 ## Database Scripts
+
 The database scripts are Linux bash scripts that are responsible for destroying the database 
 and rebuilding the database from scratch.
 The files are located in the CCDRS folder. 
@@ -164,25 +177,30 @@ keys end with _id.
 ![Database Architecture Diagram](Img/dbArchitecture.jpg)
 
 ##### direction
+
 The direction table lists the four directions available for the user to select. It stores the name
 and the abbreviation of the direction e.g. 'North', 'N'. Note that the direction table is not 
 associated or connected to any table, it is just used to display options to the front end.
 
 #### region
+
 The region table lists every region available a user can search data for. It is also one
 of the main primary tables as this table contains no foreign keys to any other table.
 
 #### survey
+
 The survey table contains a list of all the years associated with a given region.
 The survey table has two attributes the year stored as an integer and a foreign key 
 called region_id which points to the primary key of the region table.
 
 #### vehicle
+
 The vehicle table lists all possible vehicle that are available.  
 Examples of technologies are auto, bus, light truck. Note that the number of occupants
 is not stored in this table. 
 
 #### vehicle_count_type
+
 The vehicle_count_type table describes the vehicles. The vehicle_count_type table 
 stores the occupancy a given vehicle can occupy, a description of the vehicle, a 
 count_type to determine the type of vehicle, and a foreign key vehicle_id which points 
@@ -190,26 +208,31 @@ to the primary key of the vehicle table. There is a unique constraint on the tab
 the vehicle_id and occupancy have to be unique.
 
 #### station
+
 The station data lists all the stations associated with a given region. 
 The station data has the following attributes:
 the station_code, direction, the station number associated with the station, and a
 foreign key region_id associated with the primary key of the region table. 
 
 #### survey_station
+
 The survey_station table is a junction table of a many to many relationship associating 
 the stations with the survey, the years a given station is associated to. 
 The survey_station does have a unique constraint of the foreign key of station_id and
 foreign key of survey_id both being unique. 
 
 #### screeline
+
 The screenline table lists all screenlines associated with a given region. The screenline
 table has a unique constraint that each region and screenline code be unique. 
 
 #### screenline_station
+
 The screenline_station table is a junction many to many table that links each station to 
 a given screenline
 
-#### survey_count_observation 
+#### survey_count_observation
+
 The survey_count_observation table stores the data for each fifteen-minute time period for every
 recorded observation for a given station. The station has two foreign keys a foreign
 key called survey_Station_id associated to the survey_station so we can find the user selected
@@ -218,6 +241,7 @@ the user selected vehicles. The time is stored as an integer and starts at 600 w
 fifteen-minute interval increases. 
 
 #### individual_categories
+
 The individual_categories table is a table/view that is used by the ASP.Net Entity
 Framework Core to generate a list of all vehicles and their associated occupancy levels 
 with a human readable description. For example, 'light truck with 1 occupancy'.
