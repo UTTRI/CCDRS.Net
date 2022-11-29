@@ -47,8 +47,10 @@ enable and start the service:
 By default, PostgreSQL comes with a default admin user account called postgres however a password needs to be assigned to the default user.
 This is required otherwise the Asp Net core connection strings which connect to the database will fail to work. 
 - In your Linux terminal run the command `sudo -i -u postgres` to switch to the postgres account
-- Run the command `psql` to acccess posgres inside your Linux terminal 
-- Inside the postgres terminal write the following command `ALTER USER postgres PASSWORD 'myPassword’; ` where myPassword is the password you choose to add. Remember to add the semicolon at the end or the command will fail to load.
+- Run the command `psql` to access posgres inside your Linux terminal 
+- Inside the postgres terminal write the following command 
+
+`ALTER USER postgres PASSWORD 'myPassword’;` where myPassword is the password you choose to add. Remember to add the semicolon at the end or the command will fail to load.
 - Exit the psql client by writing `\q` in the terminal. 
 
 #### Install PgAdmin
@@ -64,14 +66,14 @@ https://www.pgadmin.org/download/
  Follow the steps on the official MongoDB website on installing and setting up MongoDB
  https://www.MongoDB.com/docs/manual/tutorial/install-MongoDB-on-ubuntu/
 
- #### Start and check MongoDB Service
+#### Start and check MongoDB Service
  - run the command `$ sudo service MongoDB status` to check the status of the service
  - if it displays ` * Checking status of database MongoDB  [fail]` enable the service
  - run the command `sudo service MongoDB start` to enable the PostgreSQL service 
  - once the service is successfully running in the same terminal run the command `mongo` to run the service. Keep this terminal open
  - Open a second Ubuntu terminal and type in `mongo` to access the mongo shell
  
- #### Access Mongo shell to create database and single user entry
+#### Access Mongo shell to create database and single user entry
  - We need to create one database. inside the opened mongo shell type `use myshinynewdb` where myshinynewdb is the name
  of the database you wish to use. In the development environment it is called myshinynewdb.
  - Now create a collection with the single data entry of the username and password. This information will be 
