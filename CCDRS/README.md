@@ -135,9 +135,57 @@ or creating temporary tables read from csv or txt files and then insert the data
 into the original table
 1. database cleanup, typically deleting all temporary tables that were created. 
 
-For screenline data,  
+For screenline data, a python script exists to transform the data into a version that 
+PostgresSQL copy command can work with.
+
+**Note that it is important that no duplicate data exists in the text and csv files
+because the transfering of data will then crash. Also it is important to note that no rows
+are left blank**
+
 
 ## Database Architecture
 
+The database architecture is now third normalized and consists of eleven tables as shown in
+the figure below.
+Note that due to PostgresSQL convention, all table names are lower cases and all foreign
+keys end with _id.
+![Database Archtiecture Diagram](Img/dbArchitecture.jpg)
+
+##### direction
+The direction table lists the four directions avaiable for the user to select. It stores the name
+and the abbreviation of the direction e.g. 'North', 'N'. Note that the direction table is not 
+associated or connected to any table, it is just used to display optiosn to the front end.
+
+#### region
+The region table lists every region available a user can search data for. It is also one
+of the main primary tables as this table contains no foreign keys to any other table.
+
+Inserting new regions into the database is done by opening the insert_reg-sur-dir.sql file
+and adding the following lines to the end of the region section
+
+`INSERT INTO region (name) VALUES('region_name');` where region_name is the name of the region you wish to add.
+
+#### survey
+The survey table contians a list of all the years asssociated with a given region.
+The survey table has two attributes the year stored as an integer and a foreign key 
+called region_id which points to the primary key of the region table.
+
+Inserting new survey data is done by opening the insert_reg-sur-dir.sql file
+and adding the following lines to the end of the survey section:
+
+`INSERT INTO survey(year, region_id)VALUES(year_num, (select reg.id from  region  reg where reg.name='region_name'));`
+
+where year_num is the year integer of the year to add and region_name is the name of the region
+you wish to add to the  year too. As can be seen from the example below we added an integer of 2022 and the region_name
+is equal to Toronto 
+`INSERT INTO survey(year, region_id)VALUES(2022, (select reg.id from  region  reg where reg.name='Toronto'));`
+
+#### 
+
+---
+# ToDo in Milestone 2 
+- Add logging capabilities
+- Add notes to the system. This means creating another database table, migratin the html code over
+and then dipslaying the data to the front end
 
 
