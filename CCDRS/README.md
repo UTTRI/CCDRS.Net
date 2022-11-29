@@ -16,7 +16,7 @@ The 2022 re-implementation of CCDRs
 
 Note that these instructions are for setting up the system in Windows 10.
 
----
+
 ### Install and Setup Ubuntu WSL2
 
 WSl2 is the Windows Subsystem for Linux to run Linux binaries on Windows. Ubuntu 22 is the operating system used for installing the PostgreSQL and MongoDB databases and for deployment.
@@ -32,7 +32,6 @@ Note to install the latest version of Ubuntu which is version Ubuntu 22.
 Open a terminal and switch to Ubuntu to open an Ubuntu terminal. To change directories inside the Windows machine
 use ==/mnt/c==.
 
----
 ### Install and Setup PostgreSQL
 
 Follow the links to install the latest version of PostgreSQL on the Ubuntu 22 system
@@ -64,7 +63,7 @@ This is required otherwise the Asp Net core connection strings which connect to 
 Go to the main site of PgAdmin https://www.pgadmin.org/ and under the Download section download the version of PgAdmin required.
 https://www.pgadmin.org/download/
 
----
+
 ### Install and setup MongoDB
 
  MongoDB is being used for user authentication. This database stores the username and password and setup similar to the production system currently being 
@@ -98,7 +97,7 @@ provided by DMG upon request
 
 You may need to restart the mongo service `sudo service MongoDB restart` to see the updated changes
 
----
+
 ### Setup Solution to run the project
 
 1. Git clone the repo and open it in Visual Studio. 
