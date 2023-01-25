@@ -203,8 +203,14 @@ namespace CCDRS.Pages
                                  select x
                                  )
             {
+                // convert time to minutes to get the start time
+                var minutes = (((int)(item.time / 100) * 60) + (item.time % 100)) - 14;
+                // convert start time from minutes to real time
+                var starttime = ((minutes / 60) * 100) + (minutes % 60);
                 var row = stationCountRecords[item];
                 builder.Append(item.stationName);
+                builder.Append(',');
+                builder.Append(starttime);
                 builder.Append(',');
                 builder.Append(item.time);
                 foreach (var x in row)

@@ -166,7 +166,7 @@ namespace CCDRS.Pages
                 builder.Append(' ');
                 builder.Append(surveyYear?.Year);
                 builder.AppendLine();
-                builder.Append("Station,startTime,endTime");
+                builder.Append("Station,StartTime,EndTime");
                 foreach (var item in individualCategorySelect)
                 {
                     var category = Utility.TechnologyNames.First(c => c.id == item);
@@ -189,7 +189,7 @@ namespace CCDRS.Pages
                 builder.Append(' ');
                 builder.Append(surveyYear?.Year);
                 builder.AppendLine();
-                builder.Append("Station,Time");
+                builder.Append("Station,StartTime,EndTime");
                 foreach (var item in individualCategorySelect)
                 {
                     var category = Utility.TechnologyNames.First(c => c.id == item);
@@ -260,8 +260,14 @@ namespace CCDRS.Pages
                                  select x
                                  )
             {
+                // convert time to minutes to get the start time
+                var minutes = ( ((int)(item.time / 100) * 60) + (item.time % 100) ) - 14;
+                // convert start time from minutes to real time
+                var starttime = ((minutes / 60) * 100) + (minutes % 60);
                 var row = newlist[item];
                 builder.Append(item.stationName);
+                builder.Append(',');
+                builder.Append(starttime);
                 builder.Append(',');
                 builder.Append(item.time);
                 foreach (var x in row)
