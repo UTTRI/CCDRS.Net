@@ -162,7 +162,9 @@ namespace CCDRS.Pages
             if (trafficVolumeRadioButtonSelect == 1)
             {
                 // Build the header of the content file
-                builder.Append(regionName?.Name + " " + surveyYear?.Year);
+                builder.Append(regionName?.Name);
+                builder.Append(" ");
+                builder.Append(surveyYear?.Year);
                 builder.AppendLine();
                 builder.Append("Station,startTime,endTime");
                 foreach (var item in individualCategorySelect)
@@ -183,7 +185,9 @@ namespace CCDRS.Pages
             else
             {
                 // Build the header of the content file
-                builder.Append(regionName?.Name + " " + surveyYear?.Year);
+                builder.Append(regionName?.Name);
+                builder.Append(" ");
+                builder.Append(surveyYear?.Year);
                 builder.AppendLine();
                 builder.Append("Station,Time");
                 foreach (var item in individualCategorySelect)
