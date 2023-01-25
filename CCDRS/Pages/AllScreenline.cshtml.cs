@@ -208,10 +208,10 @@ namespace CCDRS.Pages
                                  select x
                                      )
             {
-                // convert time to minutes to get the start time
-                var minutes = (((int)(item.time / 100) * 60) + (item.time % 100)) - 14;
-                // convert start time from minutes to real time
-                var starttime = ((minutes / 60) * 100) + (minutes % 60);
+                // convert DMGTime to minutes
+                int minutes = Utility.FromDMGTimeToMinutes(item.time);
+                // convert minutes back to DMG Time 
+                int starttime = Utility.MinutesToDMGTime(minutes);
                 var row = newlist[item];
                 builder.Append(item.screenLineName);
                 builder.Append(',');
