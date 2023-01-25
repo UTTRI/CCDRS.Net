@@ -163,7 +163,7 @@ namespace CCDRS.Pages
             {
                 // Build the header of the content file
                 builder.Append(regionName?.Name);
-                builder.Append(" ");
+                builder.Append(' ');
                 builder.Append(surveyYear?.Year);
                 builder.AppendLine();
                 builder.Append("Station,startTime,endTime");
@@ -186,7 +186,7 @@ namespace CCDRS.Pages
             {
                 // Build the header of the content file
                 builder.Append(regionName?.Name);
-                builder.Append(" ");
+                builder.Append(' ');
                 builder.Append(surveyYear?.Year);
                 builder.AppendLine();
                 builder.Append("Station,Time");
