@@ -156,13 +156,13 @@ namespace CCDRS
         }
 
         /// <summary>
-        /// Method to convert DMG Time to minutes and subtract 14 to calculate start time
+        /// Method to convert DMG Time to minutes
         /// </summary>
         /// <param name="DMGTime">the DMG Start Time</param>
         /// <returns>An integer of the minutes</returns>
-        public static int FromDMGTimeToMinutes(int DMGTime)
+        private static int FromDMGTimeToMinutes(int DMGTime)
         {
-            return (((int)(DMGTime / 100) * 60) + (DMGTime % 100)) - 14;
+            return (((int)(DMGTime / 100) * 60) + (DMGTime % 100));
         }
 
         /// <summary>
@@ -170,9 +170,25 @@ namespace CCDRS
         /// </summary>
         /// <param name="startTimeMinutes"></param>
         /// <returns></returns>
-        public static int MinutesToDMGTime(int startTimeMinutes)
+        private static int MinutesToDMGTime(int startTimeMinutes)
         {
             return ((startTimeMinutes / 60) * 100) + (startTimeMinutes % 60);
+        }
+
+        /// <summary>
+        /// public function to calculate the start time. First converts DMGTIme into minutes
+        /// Subtracts 14 minutes to get the start time and then does the reverse and converts 
+        /// the minutes back into DMGTime
+        /// </summary>
+        /// <param name="DMGTime">the input DMGTime that exists in the database </param>
+        /// <param name="minutes">the converted time in minutes</param>
+        /// <returns>the start time in DMGTime</returns>
+        public static int CalculateStartTime(int DMGTime)
+        {
+            // static integer value of the number of minutes to subtract to get the start time
+            int minutesToSubtract = 14;
+            int res = FromDMGTimeToMinutes(DMGTime) - minutesToSubtract;
+            return MinutesToDMGTime(res);
         }
     }
 }

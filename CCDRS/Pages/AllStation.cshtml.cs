@@ -203,10 +203,8 @@ namespace CCDRS.Pages
                                  select x
                                  )
             {
-                // convert DMGTime to minutes
-                int minutes = Utility.FromDMGTimeToMinutes(item.time);
-                // convert minutes back to DMG Time 
-                int starttime = Utility.MinutesToDMGTime(minutes);
+                //Calculate the start time
+                int starttime = Utility.CalculateStartTime(item.time);
                 var row = stationCountRecords[item];
                 builder.Append(item.stationName);
                 builder.Append(',');
