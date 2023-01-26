@@ -181,12 +181,11 @@ namespace CCDRS
         /// the minutes back into DMGTime
         /// </summary>
         /// <param name="DMGTime">the input DMGTime that exists in the database </param>
-        /// <param name="minutes">the converted time in minutes</param>
         /// <returns>the start time in DMGTime</returns>
         public static int CalculateStartTime(int DMGTime)
         {
             // static integer value of the number of minutes to subtract to get the start time
-            int minutesToSubtract = 14;
+            const int minutesToSubtract = 14;
             int res = FromDMGTimeToMinutes(DMGTime) - minutesToSubtract;
             return MinutesToDMGTime(res);
         }
