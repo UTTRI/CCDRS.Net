@@ -24,5 +24,18 @@ namespace CCDRSManager
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Method which runs on button click to open the wizard as a dialgo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RunWizard(object sender, RoutedEventArgs e)
+        {
+            // initialize the CCDRS Wizard Window object.
+            var win = new CCDRSWizard();
+            // Open the window as a dialog box.
+            win.ShowDialog();
+        }
     }
 }
