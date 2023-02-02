@@ -82,6 +82,9 @@ public partial class CCDRSContext : DbContext
     /// </summary>
     public virtual DbSet<IndividualCategory> IndividualCategories { get; set; }
 
+    /// <summary>
+    /// Allow pages to access the ScreenlineStation as a service.
+    /// </summary>
     public virtual DbSet<ScreenlineStation> ScreenlineStations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
