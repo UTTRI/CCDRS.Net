@@ -18,25 +18,74 @@ using System.ComponentModel;
 using CCDRSManager.Data;
 using CCDRSManager.Model;
 
-namespace CCDRSManager
+namespace CCDRSManager;
+
+/// <summary>
+/// ViewModel Class to manage and track property changes 
+/// </summary>
+public class CCDRSManagerViewModel : INotifyPropertyChanged
 {
     /// <summary>
-    /// ViewModel Class to manage and track property changes 
+    /// Observable List of all regions that exist in the database.
     /// </summary>
-    public class CCDRSManagerViewModel : INotifyPropertyChanged
+    public ReadOnlyObservableCollection<RegionModel> Regions { get; }
+
+    /// <summary>
+    /// Property of the selected region username received from region combobox.
+    /// </summary>
+    private int selectedRegionId { get; set; }
+    /// <summary>
+    /// Property of selected year of survey received from survey textbox.
+    /// </summary>
+    public int selectedSurvey { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    /// <summary>
+    /// Set the value of the user selected RegionId
+    /// </summary>
+    public int SelectedRegionId
     {
-        /// <summary>
-        /// Observable List of all regions that exist in the database.
-        /// </summary>
-        public ReadOnlyObservableCollection<RegionModel> Regions { get; }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        // Initialize the class 
-        public CCDRSManagerViewModel() 
+        get
         {
-            CCDRSManagerModelRepository ccdrsRepository = App.Us.CCDRSManagerModelRepository;
-            Regions = ccdrsRepository.Regions;
+            return selectedRegionId;
+        }
+        set
+        {
+            selectedRegionId = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRegionId)));
         }
     }
+
+    /// <summary>
+    /// Set the value of the user selected Survey year.
+    /// </summary>
+    public int SelectedSurvey
+    {
+        get
+        {
+            return selectedSurvey;
+        }
+        set
+        {
+            selectedSurvey = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSurvey)));
+        }
+    }
+
+    // Initialize the class constructor
+    public CCDRSManagerViewModel() 
+    {
+        CCDRSManagerModelRepository ccdrsRepository = App.Us.CCDRSManagerModelRepository;
+        Regions = ccdrsRepository.Regions;
+    }
+    /// <summary>
+    /// Method to check if the survey exists in the database or not.
+    /// </summary>
+    public bool CheckSurvey()
+    {
+        CCDRSManagerModelRepository ccdrsRepository = App.Us.CCDRSManagerModelRepository;
+        return App.Us.CCDRSManagerModelRepository.CheckSurvey(SelectedRegionId, selectedSurvey);
+    }
+
 }

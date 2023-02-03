@@ -50,7 +50,6 @@ namespace CCDRSManager
     /// </summary>
     public class CCDRSManagerModelRepository
     {
-
         private readonly CCDRSContext _context;
         private ObservableCollection<RegionModel> _regionsModel;
 
@@ -67,6 +66,37 @@ namespace CCDRSManager
         public ReadOnlyObservableCollection<RegionModel> Regions
         {
             get => new ReadOnlyObservableCollection<RegionModel>(_regionsModel);
+        }
+
+        /// <summary>
+        /// Variable to save the surveyObject to
+        /// </summary>
+        public Survey Survey;
+
+        /// <summary>
+        /// Method to check if the survey exists or not.
+        /// </summary>
+        public bool CheckSurvey(int regionId, int surveyYear)
+        {
+            // find one instance of the survey data
+            var dataList = (from surveys in _context.Surveys
+                            join regions in _context.Regions on surveys.RegionId equals regions.Id
+                            where
+                               regions.Id == regionId
+                               & surveys.Year == surveyYear
+                            select
+                              surveys
+                    ).FirstOrDefault();
+            Survey = dataList;
+            // check if a survey was found
+            if ( dataList != null )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
