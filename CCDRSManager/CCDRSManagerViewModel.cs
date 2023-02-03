@@ -25,6 +25,9 @@ namespace CCDRSManager
     /// </summary>
     public class CCDRSManagerViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Observable List of all regions that exist in the database.
+        /// </summary>
         public ReadOnlyObservableCollection<RegionModel> Regions { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;

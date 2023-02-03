@@ -26,7 +26,14 @@ namespace CCDRSManager
     /// </summary>
     public class RegionModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Primary serial key of type int that is auto generated
+        /// </summary>
         public int Id { get; }
+
+        /// <summary>
+        /// Stores the name of the region, e.g. Toronto
+        /// </summary>
         public string Name { get; }
 
         // Initialize the class.
@@ -43,6 +50,7 @@ namespace CCDRSManager
     /// </summary>
     public class CCDRSManagerModelRepository
     {
+
         private readonly CCDRSContext _context;
         public ObservableCollection<RegionModel> _regionsModel;
 
@@ -53,6 +61,9 @@ namespace CCDRSManager
             _regionsModel = new ObservableCollection<RegionModel>(_context.Regions.Select(r => new RegionModel(r)));
         }
 
+        /// <summary>
+        /// Property to get a list of all Regions that exist in the database.
+        /// </summary>
         public ReadOnlyObservableCollection<RegionModel> Regions
         {
             get => new ReadOnlyObservableCollection<RegionModel>(_regionsModel);
