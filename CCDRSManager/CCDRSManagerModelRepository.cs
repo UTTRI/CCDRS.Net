@@ -67,12 +67,7 @@ namespace CCDRSManager
         {
             get => new ReadOnlyObservableCollection<RegionModel>(_regionsModel);
         }
-
-        /// <summary>
-        /// Variable to save the surveyObject to
-        /// </summary>
-        public Survey Survey;
-
+        
         /// <summary>
         /// Method to check if the survey exists or not.
         /// </summary>
@@ -87,7 +82,7 @@ namespace CCDRSManager
                             select
                               surveys
                     ).FirstOrDefault();
-            Survey = dataList;
+
             // check if a survey was found
             if ( dataList != null )
             {
