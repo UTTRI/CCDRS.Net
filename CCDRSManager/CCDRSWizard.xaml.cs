@@ -24,6 +24,7 @@ namespace CCDRSManager
     /// </summary>
     public partial class CCDRSWizard : Window
     {
+        private static readonly Regex _testIsNumber = new ("[^0-9]+");
         public CCDRSWizard()
         {
             InitializeComponent();
@@ -36,8 +37,7 @@ namespace CCDRSManager
         /// <param name="e"></param>
         private void PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
+            e.Handled = _testIsNumber.IsMatch(e.Text);
         }
 
         /// <summary>
