@@ -52,7 +52,7 @@ namespace CCDRSManager
     {
 
         private readonly CCDRSContext _context;
-        public ObservableCollection<RegionModel> _regionsModel;
+        private ObservableCollection<RegionModel> _regionsModel;
 
         // Initialize the CCDRS class
         public CCDRSManagerModelRepository(CCDRSContext context)
