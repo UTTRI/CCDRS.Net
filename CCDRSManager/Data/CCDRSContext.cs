@@ -34,8 +34,9 @@ public partial class CCDRSContext : DbContext
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-       => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=ccdrsv1;User Id=postgres;Password=test123");
-
+    {
+        optionsBuilder.UseNpgsql(ConfigurationManager.ConnectionStrings["TestDBContext"].ConnectionString);
+    }
 
 
     /// <summary>

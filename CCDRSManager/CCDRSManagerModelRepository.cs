@@ -39,7 +39,7 @@ namespace CCDRSManager
     }
 
     /// <summary>
-    /// Class to run database queries to add, delete and read database operations.  
+    /// Class to provides access to the persistent storage?
     /// </summary>
     public class CCDRSManagerModelRepository
     {
