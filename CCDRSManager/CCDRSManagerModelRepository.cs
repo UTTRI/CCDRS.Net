@@ -14,36 +14,11 @@
 */
 
 using CCDRSManager.Data;
-using CCDRSManager.Model;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 
 namespace CCDRSManager
 {
-    /// <summary>
-    /// Region Model class that detects when the Region class is altered.
-    /// </summary>
-    public class RegionModel : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// Primary serial key of type int that is auto generated
-        /// </summary>
-        public int Id { get; }
-
-        /// <summary>
-        /// Stores the name of the region, e.g. Toronto
-        /// </summary>
-        public string Name { get; }
-
-        // Initialize the class.
-        public RegionModel(Region region)
-        {
-            Id = region.Id;
-            Name = region.Name;
-        }
-        public event PropertyChangedEventHandler? PropertyChanged;
-    }
 
     /// <summary>
     /// Class to provides access to the persistent storage?
@@ -69,29 +44,19 @@ namespace CCDRSManager
         }
         
         /// <summary>
-        /// Method to check if the survey exists or not.
+        /// Checks if the survey exists or not.
         /// </summary>
-        public bool CheckSurvey(int regionId, int surveyYear)
+        public bool CheckSurveyExists(int regionId, int surveyYear)
         {
             // find one instance of the survey data
-            var dataList = (from surveys in _context.Surveys
+            return (from surveys in _context.Surveys
                             join regions in _context.Regions on surveys.RegionId equals regions.Id
                             where
                                regions.Id == regionId
-                               & surveys.Year == surveyYear
+                               && surveys.Year == surveyYear
                             select
                               surveys
-                    ).FirstOrDefault();
-
-            // check if a survey was found
-            if ( dataList != null )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                    ).Any();
         }
     }
 }

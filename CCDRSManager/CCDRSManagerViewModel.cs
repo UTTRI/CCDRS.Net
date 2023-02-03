@@ -21,7 +21,7 @@ using CCDRSManager.Model;
 namespace CCDRSManager;
 
 /// <summary>
-/// ViewModel Class to manage and track property changes 
+/// Manage and provides executes the various use cases. 
 /// </summary>
 public class CCDRSManagerViewModel : INotifyPropertyChanged
 {
@@ -30,62 +30,59 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     public ReadOnlyObservableCollection<RegionModel> Regions { get; }
 
-    /// <summary>
-    /// Property of the selected region username received from region combobox.
-    /// </summary>
-    private int selectedRegionId { get; set; }
-    /// <summary>
-    /// Property of selected year of survey received from survey textbox.
-    /// </summary>
-    public int selectedSurvey { get; set; }
+    private int _regionId;
+
+    private int _surveyYear;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <summary>
     /// Set the value of the user selected RegionId
     /// </summary>
-    public int SelectedRegionId
+    public int RegionId
     {
         get
         {
-            return selectedRegionId;
+            return _regionId;
         }
         set
         {
-            selectedRegionId = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedRegionId)));
+            _regionId = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RegionId)));
         }
     }
 
     /// <summary>
-    /// Set the value of the user selected Survey year.
+    /// The survey year the user inputs.
     /// </summary>
-    public int SelectedSurvey
+    public int SurveyYear
     {
         get
         {
-            return selectedSurvey;
+            return _surveyYear;
         }
         set
         {
-            selectedSurvey = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedSurvey)));
+            _surveyYear = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SurveyYear)));
         }
     }
 
-    // Initialize the class constructor
+    /// <summary>
+    /// Controls access to the CCDRS model repository.
+    /// </summary>
     public CCDRSManagerViewModel() 
     {
         CCDRSManagerModelRepository ccdrsRepository = App.Us.CCDRSManagerModelRepository;
         Regions = ccdrsRepository.Regions;
     }
+
     /// <summary>
-    /// Method to check if the survey exists in the database or not.
+    /// Check if the survey exists in the database or not.
     /// </summary>
-    public bool CheckSurvey()
+    public bool CheckSurveyExists()
     {
         CCDRSManagerModelRepository ccdrsRepository = App.Us.CCDRSManagerModelRepository;
-        return App.Us.CCDRSManagerModelRepository.CheckSurvey(SelectedRegionId, selectedSurvey);
+        return App.Us.CCDRSManagerModelRepository.CheckSurveyExists(RegionId, SurveyYear);
     }
-
 }

@@ -45,20 +45,20 @@ namespace CCDRSManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CheckSurvey(object sender, RoutedEventArgs e)
+        private void CheckSurveyExists(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("this ran");
-            bool value = (bool)((DataContext as CCDRSManagerViewModel)?.CheckSurvey());
-            if (value)
+            if (DataContext is CCDRSManagerViewModel vm) 
             {
-                MessageBox.Show("This data already exists in the database. We will delete all records " +
-                    "Click yes to delete all records and no to cancel this operation",
-                    "My App", MessageBoxButton.YesNo);
-            }
-            else
-            {
-                MessageBoxResult mClicked = MessageBox.Show("No duplicate survey data was discovered in the database " + 
-                    "Click next to add station data", "My App");
+                if (vm.CheckSurveyExists())
+                {
+                    MessageBox.Show(this, "This data already exists in the database. We will delete all records " +
+                   "Click yes to delete all records and no to cancel this operation", "", MessageBoxButton.YesNo);
+                }
+                else
+                {
+                    MessageBox.Show(this, "No duplicate survey data was discovered in the database " +
+                        "Click next to add station data");
+                }
             }
         }
     }
