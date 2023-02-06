@@ -28,7 +28,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// <summary>
     /// ccdrsRepository variable used and accessed by all methods.
     /// </summary>
-    private readonly CCDRSManagerModelRepository ccdrsRepository = App.Us.CCDRSManagerModelRepository;
+    private readonly CCDRSManagerModelRepository _ccdrsRepository = App.Us.CCDRSManagerModelRepository;
 
     /// <summary>
     /// Observable List of all regions that exist in the database.
@@ -78,7 +78,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     public CCDRSManagerViewModel() 
     {
-        Regions = ccdrsRepository.Regions;
+        Regions = _ccdrsRepository.Regions;
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     public bool CheckSurveyExists()
     {
-        return ccdrsRepository.CheckSurveyExists(RegionId, SurveyYear);
+        return _ccdrsRepository.CheckSurveyExists(RegionId, SurveyYear);
     }
 
     /// <summary>
@@ -94,6 +94,6 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     public void DeleteSurveyData()
     {
-        ccdrsRepository.DeleteSurveyData(RegionId, SurveyYear);
+        _ccdrsRepository.DeleteSurveyData(RegionId, SurveyYear);
     }
 }
