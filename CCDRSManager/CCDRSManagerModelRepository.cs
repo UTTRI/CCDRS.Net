@@ -115,7 +115,7 @@ public class CCDRSManagerModelRepository
     public void CheckIfStationExists(int regionId, string stationCode, string stationDescription)
     {
         // Check if stationCode exists in database.
-        var data = (from stations in _context.Stations
+        var stationExists = (from stations in _context.Stations
                               join regions in _context.Regions on stations.RegionId equals regions.Id
                               where
                                 regions.Id == regionId
@@ -123,8 +123,8 @@ public class CCDRSManagerModelRepository
                               select
                                 stations).Any();
 
-        // Add new stationCode to the stations context.
-        if (data == null)
+        // Add new stationCode to the stations context if stationExists return False.
+        if (stationExists == false)
         {
             // Add new station code to the Stations context.
             Station newStation = new Station();
@@ -148,7 +148,6 @@ public class CCDRSManagerModelRepository
         {
             string? line;
             string[] row;
-            readFile.ReadLine();
             readFile.ReadLine();
             // loop through the line
             while ((line = readFile.ReadLine()) is not null)
