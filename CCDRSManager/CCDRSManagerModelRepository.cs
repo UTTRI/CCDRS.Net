@@ -112,7 +112,7 @@ public class CCDRSManagerModelRepository
     /// <param name="regionId">Primary serial key of the region.</param>
     /// <param name="stationCode">StationCode number used to check if station exists in the database.</param>
     /// <param name="stationDescription">Description of station provided by agency.</param>
-    public void CheckIfStationExists(int regionId, string stationCode, string stationDescription)
+    public void AddStationIfNotExists(int regionId, string stationCode, string stationDescription)
     {
         // Check if stationCode exists in database.
         var stationExists = (from stations in _context.Stations
@@ -154,7 +154,7 @@ public class CCDRSManagerModelRepository
             {
                 row = line.Split(';');
                 // add station data
-                CheckIfStationExists(regionId, row[0], row[1]);
+                AddStationIfNotExists(regionId, row[0], row[1]);
             }
         };
     }
