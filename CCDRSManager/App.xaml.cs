@@ -23,14 +23,9 @@ namespace CCDRSManager
     /// </summary>
     public partial class App : Application
     {
-        private readonly CCDRSContext _context = new CCDRSContext();
-        public CCDRSManagerModelRepository CCDRSManagerModelRepository { get; }
-
-        public static App Us { get; private set; } = null!;
         public App()
         {
-            CCDRSManagerModelRepository = new CCDRSManagerModelRepository(_context);
-            Us = this;
+            Configuration.Initialize();
         }
 
         protected override void OnStartup(StartupEventArgs e)
