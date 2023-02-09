@@ -15,25 +15,14 @@
 
 using CCDRSManager.Data;
 using CCDRSManager.Model;
-using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.IdentityFramework;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.PerformanceData;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Xceed.Wpf.AvalonDock.Themes;
 
 namespace CCDRSManager;
 
@@ -59,7 +48,7 @@ public partial class CCDRSManagerModelRepository
     {
         get => new(_regionsModel);
     }
-    
+
     /// <summary>
     /// Checks if the survey exists or not.
     /// </summary>
@@ -67,12 +56,12 @@ public partial class CCDRSManagerModelRepository
     {
         // find one instance of the survey data
         return (from surveys in _context.Surveys
-                        join regions in _context.Regions on surveys.RegionId equals regions.Id
-                        where
-                           regions.Id == regionId
-                           && surveys.Year == surveyYear
-                        select
-                          surveys
+                join regions in _context.Regions on surveys.RegionId equals regions.Id
+                where
+                   regions.Id == regionId
+                   && surveys.Year == surveyYear
+                select
+                  surveys
                 ).Any();
     }
 
@@ -122,12 +111,12 @@ public partial class CCDRSManagerModelRepository
     {
         // Check if stationCode exists in database.
         var stationExists = (from stations in _context.Stations
-                              join regions in _context.Regions on stations.RegionId equals regions.Id
-                              where
-                                regions.Id == regionId
-                                && stations.StationCode == stationCode.Trim()
-                              select
-                                stations).Any();
+                             join regions in _context.Regions on stations.RegionId equals regions.Id
+                             where
+                               regions.Id == regionId
+                               && stations.StationCode == stationCode.Trim()
+                             select
+                               stations).Any();
 
         // Add new stationCode to the stations context if stationExists return False.
         if (stationExists == false)
@@ -298,10 +287,10 @@ public partial class CCDRSManagerModelRepository
     /// <param name="surveyYear">Year of survey e.g.2016.</param>
     /// <param name="checkIfAdd">Function to check if the vehicle type exist in the database or not.</param>
     /// <exception cref="NotImplementedException"></exception>
-    public void AddStationCountObservationData(string stationCountObservationFile, int regionId, int surveyYear, Func<string, bool>?checkIfAdd=null)
+    public void AddStationCountObservationData(string stationCountObservationFile, int regionId, int surveyYear, Func<string, bool>? checkIfAdd = null)
     {
         string[] headerLine;
-        
+
         List<VehicleCountType> vehicleCountTypeList = new();
 
         // read the station_count_observation ccdrs csv file
@@ -354,7 +343,7 @@ public partial class CCDRSManagerModelRepository
         }
         // Update the individaul_categories table to display the correct technologies on webpage.
         UpdateIndividualCategoriesTable(regionId, surveyYear, vehicleCountTypeList);
-        
+
         // Save the changes to the database.
         SaveData();
     }
