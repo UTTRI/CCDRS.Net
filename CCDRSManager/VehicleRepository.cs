@@ -12,8 +12,13 @@ namespace CCDRSManager;
 public class VehicleRepository
 {
     private readonly CCDRSContext _context;
+    
     private readonly ObservableCollection<VehicleCountTypeModel> _vehiclesModel;
 
+    /// <summary>
+    /// Initialize VehicleRepository and get all the vehiclCountType objects in the database on page load.
+    /// </summary>
+    /// <param name="context">instance of CCDRSContext.</param>
     public VehicleRepository(CCDRSContext context)
     {
         _context = context;
@@ -28,6 +33,12 @@ public class VehicleRepository
         get => new(_vehiclesModel);
     }
 
+    /// <summary>
+    /// Method that updates the VehicleCountType object in the database.
+    /// </summary>
+    /// <param name="vehicleCountTypeId">Primary serial key of the VehicleCountType object.</param>
+    /// <param name="header">Name of the column e.g. Description and Occupancy.</param>
+    /// <param name="newValue">Value to update and edit the database.</param>
     public void UpdateVehicleCountTypeData(int vehicleCountTypeId, string header, string newValue)
     {
         var item = _context.VehicleCountTypes.Find(vehicleCountTypeId);
