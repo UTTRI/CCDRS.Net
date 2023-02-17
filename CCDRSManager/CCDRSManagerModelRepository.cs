@@ -198,18 +198,18 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="vehicleName">Name of vehicle as a string to search against in the database.</param>
     /// <returns></returns>
-    public Vehicle CheckIfVehicleExists(string vehicleName)
+    public Vehicle? GetVehicleIfExists(string vehicleName)
     {
         return _context.Vehicles.Where(v => v.Name == vehicleName).FirstOrDefault();
     }
 
     /// <summary>
-    /// Checks if a vehicle count type object exists based on a given vehicle id and occupancy number.
+    /// Checks if a vehicle_count_type object exists based on a given vehicle id and occupancy number.
     /// </summary>
     /// <param name="vehicleId">Primary key of vehicle.</param>
     /// <param name="occupancy">Number of occupants that can sit in vehicle.</param>
     /// <returns>A VehicleCountType object.</returns>
-    public VehicleCountType CheckIfVehicleCountTypeExists(int vehicleId, int occupancy)
+    public VehicleCountType? GetVehicleCountTypeIfExists(int vehicleId, int occupancy)
     {
         return _context.VehicleCountTypes.Where(v => v.VehicleId == vehicleId && v.Occupancy == occupancy).FirstOrDefault();
     }
@@ -252,19 +252,19 @@ public partial class CCDRSManagerModelRepository
     }
 
     /// <summary>
-    /// Checks if the vehicle type exists in the database
+    /// Ensures if the vehicle type exists in the database
     /// </summary>
-    /// <param name="technology">Name of vehicle type as a string.</param>
+    /// <param name="header">Name of vehicle type as a string.</param>
     /// <param name="vehicleResult">A VehicleCountType object.</param>
     /// <returns>true if a VehicleCountType object is found else false.</returns>
-    public VehicleCountType GetVehicleCountTypeObject(string technology)
+    public VehicleCountType GetVehicleCountTypeObject(string header)
     {
-        Vehicle vehicle;
-        VehicleCountType vehicleCountTypeResult;
+        Vehicle? vehicle;
+        VehicleCountType? vehicleCountTypeResult;
 
         // Regex to split the technology at the number if applicable.
         Regex re = MyRegex();
-        Match regexValue = re.Match(technology);
+        Match regexValue = re.Match(header);
 
         // Regex match found so do two queries
         if (regexValue.Success)
@@ -273,50 +273,47 @@ public partial class CCDRSManagerModelRepository
             int vehicleNumber = int.Parse(regexValue.Groups[2].Value);
 
             // Check to see if vehicle object exists.
-            vehicle = CheckIfVehicleExists(vehicleName);
+            vehicle = GetVehicleIfExists(vehicleName);
 
+            // If the vehicle doesn't exist in the database create a new vehicle and associated
+            // vehicle_count_type entry in the database otherwise check if the vehicle_count_type exists 
+            // in the database and if it doesn't create a new vehicle_count_type entry or return the entry
+            // in the database.
             if (vehicle is null)
             {
-                // New vehicle found so add the new vehicle to the database
-                Vehicle newVehicle = AddVehicle(technology);
+                // New vehicle found so add the new vehicle to the database.
+                Vehicle newVehicle = AddVehicle(header);
 
-                // Create a new vehicle_count_type entry in the database.
-                return AddNewVehicleCountType(vehicleNumber, technology, newVehicle.Id);
+                // Create a new vehicle_count_type entry in the database associated with the new vehicle.
+                return AddNewVehicleCountType(vehicleNumber, header, newVehicle.Id);
             }
             else
             {
-                // This vehicle already exists in the database check if an associated
-                // vehicle_count_type object of given occupancy number exists in the database.
-                vehicleCountTypeResult = CheckIfVehicleCountTypeExists(vehicle.Id, vehicleNumber);
+                // Vehicle already exists in the database check if an associated
+                // vehicle_count_type object with given occupancy number exists in the database.
+                vehicleCountTypeResult = GetVehicleCountTypeIfExists(vehicle.Id, vehicleNumber);
 
-                // check if the VehicleCountType exists. If it does return found object
-                // otherwise create a new VehicleCountTypObject.
-                if (vehicleCountTypeResult is null)
-                {
-                    return AddNewVehicleCountType(vehicleNumber, technology, vehicle.Id);
-                }
-                else
-                {
-                    return vehicleCountTypeResult;
-                }
+                return vehicleCountTypeResult ?? AddNewVehicleCountType(vehicleNumber, header, vehicle.Id);
             }
         }
         else
         {
-            // No regex match found so query the vehicle table to see if the vehicle exists.
-            vehicle = CheckIfVehicleExists(technology);
+            // No regex match found so query the vehicle table to see if vehicle exists.
+            vehicle = GetVehicleIfExists(header);
 
             // If vehicle object is null create a new vehicle object and the associated vehicle_count_object
             // otherwise return vehicleCountType object existing in the database.
             if (vehicle is null)
             {
-                Vehicle newVehicleObject = AddVehicle(technology);
-                return AddNewVehicleCountType(1, technology, newVehicleObject.Id);
+                Vehicle newVehicleObject = AddVehicle(header);
+                return AddNewVehicleCountType(1, header, newVehicleObject.Id);
             }
             else
             {
-                // vehicle does exist
-                return CheckIfVehicleCountTypeExists(vehicle.Id, 1);
+                // successfully returned a vehicle object now return the associated vehicle_count_type object
+                // which exists.
+                vehicleCountTypeResult = GetVehicleCountTypeIfExists(vehicle.Id, 1);
+                return vehicleCountTypeResult ?? AddNewVehicleCountType(1, header, vehicle.Id);
             }
         }
     }
