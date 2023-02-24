@@ -477,7 +477,7 @@ public partial class CCDRSManagerModelRepository
     public void InsertDataIntoScreenline(int regionId, string[] screenlineData)
     {
         if (!_context.Screenlines.Any(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]))
-            {
+        {
             // Make a new screenline object
             Screenline newScreenline = new()
             {
@@ -499,10 +499,10 @@ public partial class CCDRSManagerModelRepository
     {
         // find the Screenline object.
         Screenline? screenline = _context.Screenlines.FirstOrDefault(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]);
-        
+
         // Find the station object in the data.
         Station? station = _context.Stations.FirstOrDefault(s => s.StationCode == screenlineData[2] && s.RegionId == regionId);
-        
+
         if (station is not null)
         {
             // Create a new ScreenlineStation object.
