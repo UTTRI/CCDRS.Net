@@ -476,7 +476,7 @@ public partial class CCDRSManagerModelRepository
     /// <param name="screenlineData">List of data of a screenline containing screenline code, description and associated station.</param>
     public void InsertDataIntoScreenline(int regionId, string[] screenlineData)
     {
-        if (_context.Screenlines.Where(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]).FirstOrDefault() == null)
+        if (!_context.Screenlines.Any(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]))
             {
             // Make a new screenline object
             Screenline newScreenline = new()
@@ -498,7 +498,7 @@ public partial class CCDRSManagerModelRepository
     public void AddScreenlineStationData(int regionId, string[] screenlineData)
     {
         // find the Screenline object.
-        Screenline? screenline = _context.Screenlines.Where(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]).FirstOrDefault();
+        Screenline? screenline = _context.Screenlines.Where(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]).First();
         
         // Find the station object in the data.
         Station? station = _context.Stations.Where(s => s.StationCode == screenlineData[2] && s.RegionId == regionId).FirstOrDefault();
