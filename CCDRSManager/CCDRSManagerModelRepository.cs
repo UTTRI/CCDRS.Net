@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -454,6 +455,90 @@ public partial class CCDRSManagerModelRepository
                 VehicleName = vehicle.Name
             };
             _context.IndividualCategories.Add(iC);
+        }
+    }
+
+    /// <summary>
+    /// Delete all screenline and ScreenlineStation data for specified regionId.
+    /// </summary>
+    /// <param name="regionId">Primary serial key of region.</param>
+    public void DeleteScreenline(int regionId)
+    {
+        List<Screenline> dataList = _context.Screenlines.Where(s => s.RegionId == regionId).ToList();
+        _context.Screenlines.RemoveRange(dataList);
+        _context.SaveChanges();
+    }
+
+    /// <summary>
+    /// Insert data into the screenline table.
+    /// </summary>
+    /// <param name="regionId">Primary serial key of region.</param>
+    /// <param name="screenlineData">List of data of a screenline containing screenline code, description and associated station.</param>
+    public void InsertDataIntoScreenline(int regionId, string[] screenlineData)
+    {
+        if (_context.Screenlines.Where(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]).FirstOrDefault() == null)
+            {
+            // Make a new screenline object
+            Screenline newScreenline = new()
+            {
+                RegionId = regionId,
+                SlineCode = screenlineData[0],
+                Note = screenlineData[1]
+            };
+            _context.Screenlines.Add(newScreenline);
+            _context.SaveChanges();
+        }
+    }
+
+    /// <summary>
+    /// Insert data into the ScreenlineStation table.
+    /// </summary>
+    /// <param name="regionId">Primary serial key of region.</param>
+    /// <param name="screenlineData">List of data of a screenline containing screenline code, description and associated station.</param>
+    public void AddScreenlineStationData(int regionId, string[] screenlineData)
+    {
+        // find the Screenline object.
+        Screenline? screenline = _context.Screenlines.Where(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]).FirstOrDefault();
+        
+        // Find the station object in the data.
+        Station? station = _context.Stations.Where(s => s.StationCode == screenlineData[2] && s.RegionId == regionId).FirstOrDefault();
+        
+        if (station is not null)
+        {
+            // Create a new ScreenlineStation object.
+            ScreenlineStation newScreenlineStation = new()
+            {
+                ScreenlineId = screenline.Id,
+                StationId = station.Id
+            };
+            _context.ScreenlineStations.Add(newScreenlineStation);
+            _context.SaveChanges();
+        }
+    }
+
+    /// <summary>
+    /// Parse screenline csv file and insert data into the Screenline and ScreenlineStation tables.
+    /// </summary>
+    /// <param name="regionId">Primary serial key of region.</param>
+    /// <param name="screenlineFileName">Filepath to the location of the screenline csv file.</param>
+    public void AddScreenlineData(int regionId, string screenlineFileName)
+    {
+        // Delete all the screenline data of provided region.
+        DeleteScreenline(regionId);
+
+        // read the screenline csv file
+        using var readFile = new StreamReader(screenlineFileName);
+        string? line;
+        string[] observationData;
+
+        // Loop through the remaining rows of data and insert the screenline data into the database.
+        while ((line = readFile.ReadLine()) is not null)
+        {
+            observationData = line.Split(',');
+            // insert data into Screenline table.
+            InsertDataIntoScreenline(regionId, observationData);
+            // insert data into the ScreenlineStation table.
+            AddScreenlineStationData(regionId, observationData);
         }
     }
 
