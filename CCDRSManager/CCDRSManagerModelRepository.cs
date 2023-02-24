@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -474,16 +473,16 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="regionId">Primary serial key of region.</param>
     /// <param name="screenlineData">List of data of a screenline containing screenline code, description and associated station.</param>
-    public void InsertDataIntoScreenline(int regionId, string[] screenlineData)
+    public void InsertDataIntoScreenline(int regionId, string slineCode, string slineDescription)
     {
-        if (!_context.Screenlines.Any(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]))
+        if (!_context.Screenlines.Any(s => s.RegionId == regionId && s.SlineCode == slineCode))
         {
             // Make a new screenline object
             Screenline newScreenline = new()
             {
                 RegionId = regionId,
-                SlineCode = screenlineData[0],
-                Note = screenlineData[1]
+                SlineCode = slineCode,
+                Note = slineDescription
             };
             _context.Screenlines.Add(newScreenline);
             _context.SaveChanges();
@@ -495,13 +494,13 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="regionId">Primary serial key of region.</param>
     /// <param name="screenlineData">List of data of a screenline containing screenline code, description and associated station.</param>
-    public void AddScreenlineStationData(int regionId, string[] screenlineData)
+    public void AddScreenlineStationData(int regionId, string slineCode, string stationCode)
     {
         // find the Screenline object.
-        Screenline? screenline = _context.Screenlines.FirstOrDefault(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]);
+        Screenline? screenline = _context.Screenlines.FirstOrDefault(s => s.RegionId == regionId && s.SlineCode == slineCode);
 
         // Find the station object in the data.
-        Station? station = _context.Stations.FirstOrDefault(s => s.StationCode == screenlineData[2] && s.RegionId == regionId);
+        Station? station = _context.Stations.FirstOrDefault(s => s.StationCode == stationCode && s.RegionId == regionId);
 
         if (station is not null)
         {
@@ -535,10 +534,13 @@ public partial class CCDRSManagerModelRepository
         while ((line = readFile.ReadLine()) is not null)
         {
             observationData = line.Split(',');
+            string slineCode = observationData[0];
+            string slineDescription = observationData[1];
+            string stationCode = observationData[2];
             // insert data into Screenline table.
-            InsertDataIntoScreenline(regionId, observationData);
+            InsertDataIntoScreenline(regionId, slineCode, slineDescription);
             // insert data into the ScreenlineStation table.
-            AddScreenlineStationData(regionId, observationData);
+            AddScreenlineStationData(regionId, slineCode, stationCode);
         }
     }
 
