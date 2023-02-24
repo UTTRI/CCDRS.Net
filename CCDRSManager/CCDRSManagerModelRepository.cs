@@ -498,10 +498,10 @@ public partial class CCDRSManagerModelRepository
     public void AddScreenlineStationData(int regionId, string[] screenlineData)
     {
         // find the Screenline object.
-        Screenline? screenline = _context.Screenlines.Where(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]).First();
+        Screenline? screenline = _context.Screenlines.FirstOrDefault(s => s.RegionId == regionId && s.SlineCode == screenlineData[0]);
         
         // Find the station object in the data.
-        Station? station = _context.Stations.Where(s => s.StationCode == screenlineData[2] && s.RegionId == regionId).FirstOrDefault();
+        Station? station = _context.Stations.FirstOrDefault(s => s.StationCode == screenlineData[2] && s.RegionId == regionId);
         
         if (station is not null)
         {
