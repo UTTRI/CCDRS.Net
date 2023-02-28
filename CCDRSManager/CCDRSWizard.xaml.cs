@@ -136,9 +136,10 @@ namespace CCDRSManager
                 {
                     this.IsEnabled = false;
                     vm.IsRunning = true;
-                    await Task.Run(() => { vm.AddSurveyData();});
-                    await Task.Run(() => { vm.AddStationData();});
-                    await Task.Run(() => { vm.AddSurveyStationData();});
+                    await Task.Run(() => { vm.AddSurveyData();
+                                           vm.AddStationData();
+                                           vm.AddSurveyStationData();
+                                        });
                     MessageBox.Show(this, "Successfully added survey and station data to the database.");
                 }
                 finally
