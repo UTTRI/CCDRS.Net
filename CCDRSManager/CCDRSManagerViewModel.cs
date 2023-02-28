@@ -15,10 +15,6 @@
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Security.RightsManagement;
-using System.Threading.Tasks;
-
 namespace CCDRSManager;
 
 /// <summary>
@@ -111,7 +107,9 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    // Property of the progress bar to check if it is running or not.
+    /// <summary>
+    /// Property of the progress bar to check if it is running or not.
+    /// </summary>
     private bool _isRunning;
     public bool IsRunning
     {
@@ -123,7 +121,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-  
+
     private string _screenlineFileName = string.Empty;
 
     /// <summary>
