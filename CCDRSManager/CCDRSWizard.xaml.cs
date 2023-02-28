@@ -13,10 +13,13 @@
     along with CCDRS.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using System;
+using System.Runtime.Serialization.DataContracts;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Xceed.Wpf.Toolkit;
 
 namespace CCDRSManager
 {
@@ -48,14 +51,12 @@ namespace CCDRSManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void CheckSurveyExists(object sender, RoutedEventArgs e)
+        private async void CheckSurveyExists(CCDRSManagerViewModel vm)
         {
-            if (DataContext is CCDRSManagerViewModel vm)
-            {
                 if (vm.CheckSurveyExists())
                 {
                     // If the user clicks the yes button on the message box delete the survey data.
-                    MessageBoxResult messageBoxResult = MessageBox.Show(this, "This data already exists in the database. We will delete all records " +
+                    System.Windows.MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(this, "This data already exists in the database. We will delete all records " +
                    "Click yes to delete all records and no to cancel this operation", "", MessageBoxButton.YesNo);
                     if (messageBoxResult == MessageBoxResult.Yes)
                     {
@@ -64,22 +65,21 @@ namespace CCDRSManager
                             this.IsEnabled = false;
                             vm.IsRunning = true;
                             // Delete the survey
-                            await Task.Run(() => { vm.DeleteSurveyData();});
+                            await Task.Run(() => { vm.DeleteSurveyData(); });
                         }
                         finally
                         {
                             vm.IsRunning = false;
                             this.IsEnabled = true;
                         }
-                        MessageBox.Show(this, "Survey Data successfully deleted. Please click next to add Station data.");
+                        System.Windows.MessageBox.Show(this, "Survey Data successfully deleted. Please click next to add Station data.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show(this, "No duplicate survey data was discovered in the database " +
+                    System.Windows.MessageBox.Show(this, "No duplicate survey data was discovered in the database " +
                         "Click next to add station data");
                 }
-            }
         }
 
         /// <summary>
@@ -128,25 +128,24 @@ namespace CCDRSManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void AddStationData(object sender, RoutedEventArgs e)
+        //private async void AddStationData(object sender, RoutedEventArgs e)
+        private async void AddStationData(CCDRSManagerViewModel vm)
         {
-            if (DataContext is CCDRSManagerViewModel vm)
+            try
             {
-                try
-                {
-                    this.IsEnabled = false;
-                    vm.IsRunning = true;
-                    await Task.Run(() => { vm.AddSurveyData();
-                                           vm.AddStationData();
-                                           vm.AddSurveyStationData();
-                                        });
-                    MessageBox.Show(this, "Successfully added survey and station data to the database.");
-                }
-                finally
-                {
-                    vm.IsRunning = false;
-                    this.IsEnabled = true;
-                }
+                this.IsEnabled = false;
+                vm.IsRunning = true;
+                await Task.Run(() => {
+                    vm.AddSurveyData();
+                    vm.AddStationData();
+                    vm.AddSurveyStationData();
+                });
+                System.Windows.MessageBox.Show(this, "Successfully added survey and station data to the database.");
+            }
+            finally
+            {
+                vm.IsRunning = false;
+                this.IsEnabled = true;
             }
         }
 
@@ -155,21 +154,47 @@ namespace CCDRSManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void AddStationCountObservationData(object sender, RoutedEventArgs e)
+        //private async void AddStationCountObservationData(object sender, RoutedEventArgs e)
+        private async void AddStationCountObservationData(CCDRSManagerViewModel vm)
+        {
+            try
+            {
+                this.IsEnabled = false;
+                vm.IsRunning = true;
+                await Task.Run(() => { vm.AddStationCountObserationData(); });
+                System.Windows.MessageBox.Show(this, "Successfully added station count observation data to the database. Press Finish and close the wizard.");
+            }
+            finally
+            {
+                vm.IsRunning = false;
+                this.IsEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Method that gets the current page of the wizard and executes the appropriate use case.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NextEventClick(object sender, Xceed.Wpf.Toolkit.Core.CancelRoutedEventArgs e)
         {
             if (DataContext is CCDRSManagerViewModel vm)
             {
-                try
+                if (vm.CurrentWizardPage.Name == "Page1")
                 {
-                    this.IsEnabled = false;
-                    vm.IsRunning = true;
-                    await Task.Run(() => { vm.AddStationCountObserationData();});
-                    MessageBox.Show(this, "Successfully added station count observation data to the database. Press Finish and close the wizard."); 
+                    CheckSurveyExists(vm);
                 }
-                finally
+                else if (vm.CurrentWizardPage.Name == "Page2")
                 {
-                    vm.IsRunning = false;
-                    this.IsEnabled = true;
+                    AddStationData(vm);
+                }
+                else if (vm.CurrentWizardPage.Name == "Page3")
+                {
+                    AddStationCountObservationData(vm);
+                }
+                else
+                {
+                    
                 }
             }
         }

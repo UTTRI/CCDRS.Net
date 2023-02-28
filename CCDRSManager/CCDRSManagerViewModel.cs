@@ -15,6 +15,8 @@
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Xceed.Wpf.Toolkit;
+
 namespace CCDRSManager;
 
 /// <summary>
@@ -121,7 +123,6 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-
     private string _screenlineFileName = string.Empty;
 
     /// <summary>
@@ -140,7 +141,22 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-
+    private WizardPage _currentWizardPage;
+    /// <summary>
+    /// Get the current page the wizard is on when the next button is clicked.
+    /// </summary>
+    public WizardPage CurrentWizardPage
+    {
+        get
+        {
+            return _currentWizardPage;
+        }
+        set
+        {
+            _currentWizardPage = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentWizardPage)));
+        }
+    }
 
     /// <summary>
     /// Controls access to the CCDRS model repository.
