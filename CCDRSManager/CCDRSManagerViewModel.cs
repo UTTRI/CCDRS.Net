@@ -16,8 +16,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Security.Policy;
-using Xceed.Wpf.Toolkit;
 
 namespace CCDRSManager;
 
@@ -241,10 +239,10 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     internal void GoToNextStep()
     {
-        if(CurrentSurveyStep != ImportSurveyStep.LastPage)
+        if (CurrentSurveyStep != ImportSurveyStep.LastPage)
         {
-            CurrentSurveyStep = (ImportSurveyStep)((int) CurrentSurveyStep + 1);
-        }       
+            CurrentSurveyStep = (ImportSurveyStep)((int)CurrentSurveyStep + 1);
+        }
     }
 
     /// <summary>
@@ -252,7 +250,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     internal void GoToPreviousStep()
     {
-        if (CurrentSurveyStep != ImportSurveyStep.LastPage)
+        if (CurrentSurveyStep != ImportSurveyStep.IntroPage)
         {
             CurrentSurveyStep = (ImportSurveyStep)((int)CurrentSurveyStep - 1);
         }

@@ -13,13 +13,10 @@
     along with CCDRS.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Runtime.Serialization.DataContracts;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Xceed.Wpf.Toolkit;
 
 namespace CCDRSManager
 {
