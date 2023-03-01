@@ -13,10 +13,10 @@
     <Grid>
         <xctk:Wizard FinishButtonClosesWindow="True" 
                      Next="NextEventClick"
-                     CurrentPage="{Binding Path=CurrentWizardPage, Mode=TwoWay}">
+                     Previous="Wizard_Previous">
             <xctk:WizardPage x:Name="IntroPage" 
-                                   Title="Welcome to the CCDRS Survey upload Wizxard"
-                                   Description="This Wizard will walk you though how to upload a survey" >
+                    Title="Welcome to the CCDRS Survey upload Wizxard"
+                    Description="This Wizard will walk you though how to upload a survey" >
                 <StackPanel>
                     <TextBlock Text="The following csv files are needed: A stationcount csv file and the ccdrs observation file" />
                 </StackPanel>
@@ -44,8 +44,7 @@
             </xctk:WizardPage>
             
             <xctk:WizardPage x:Name="Page2" PageType="Interior"
-                    Title="Upload Station file of survey"
-                    >
+                    Title="Upload Station file of survey">
                 <StackPanel>
                     <ProgressBar 
                         IsIndeterminate="{Binding IsRunning}" 
@@ -60,7 +59,8 @@
             </xctk:WizardPage>
 
             <xctk:WizardPage x:Name="Page3" PageType="Interior"
-                    Title="Please upload the stationcount csv file">
+                    Title="Please upload the stationcount csv file"
+                              BackButtonVisibility="Hidden">
                 <StackPanel>
                     <ProgressBar IsIndeterminate="{Binding IsRunning}" 
                                  Minimum="0" Maximum="100" Height="20" />
@@ -75,9 +75,10 @@
 
             <xctk:WizardPage x:Name="LastPage" PageType="Interior"
                     Title="Please upload the stationcount csv file"
-                    CanFinish="True">
+                    CanFinish="True"  BackButtonVisibility="Hidden">
                 <StackPanel>
-                    <TextBlock>This is now finsished please press finish to close the system.</TextBlock>
+                    <ProgressBar IsIndeterminate="{Binding IsRunning}" 
+                                 Minimum="0" Maximum="100" Height="20" />
                 </StackPanel>
             </xctk:WizardPage>
             
