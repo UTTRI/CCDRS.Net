@@ -154,15 +154,23 @@ public partial class CCDRSWizard : Window
         {
             // Disable the next, previous and finish buttons.
             Page3.CanSelectPreviousPage = false;
-            Page3.CanSelectNextPage= false;
+            Page3.CanSelectNextPage = false;
             Page3.CanFinish = false;
 
             //Run the progress bar.
-            vm.IsRunning= true;
-            await CheckSurveyExists(vm);
-            await AddStationData(vm);
-            await AddStationCountObservationData(vm);
-            
+            vm.IsRunning = true;
+            try
+            {
+                await CheckSurveyExists(vm);
+                await AddStationData(vm);
+                await AddStationCountObservationData(vm);
+            }
+            catch (Exception ex)
+            {
+                vm.TextBlockData("red", ex.Message);
+            }
+
+
             // close the progress bar.
             vm.IsRunning = false;
 
