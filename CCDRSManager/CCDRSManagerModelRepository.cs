@@ -399,12 +399,7 @@ public partial class CCDRSManagerModelRepository
                 // Loop through header to check if the vehicle exists in the database or not
                 foreach (string technology in headerLine)
                 {
-                    // Ignore if the header value is labeled station or time 
-                    if (technology == "station" || technology == "time")
-                    {
-                        continue;
-                    }
-                    else
+                    if (!(technology == "station" || technology == "time"))
                     {
                         // get the VehicleCountTypeObject and add to the list.
                         VehicleCountType result = GetVehicleCountTypeObject(technology);
@@ -571,7 +566,7 @@ public partial class CCDRSManagerModelRepository
     /// <returns></returns>
     public void SaveData()
     {
-        _context.SaveChanges(); // SaveChangesAsync();
+        _context.SaveChanges();
     }
 
     [GeneratedRegex("([a-zA-Z]+)(\\d+)")]

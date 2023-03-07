@@ -59,7 +59,11 @@ public partial class CCDRSWizard : Window
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 // Delete the survey
-                await Task.Run(() => { vm.DeleteSurveyData(); });
+                await Task.Run(() => 
+                { 
+                    vm.DeleteSurveyData();
+                    vm.SetTextBlockData("green", "Survey Data successfully deleted. Adding Survey Data.");
+                });
             }
             else
             {
@@ -125,8 +129,11 @@ public partial class CCDRSWizard : Window
         await Task.Run(() =>
         {
             vm.AddSurveyData();
+            vm.SetTextBlockData("green", "Survey data successfully Added. Now adding Station Data");
             vm.AddStationData();
+            vm.SetTextBlockData("green", "Station data successfully Added");
             vm.AddSurveyStationData();
+            vm.SetTextBlockData("green", "Survey Station data successfully Added");
         });
         return true;
     }
@@ -138,7 +145,12 @@ public partial class CCDRSWizard : Window
     /// <returns>return true if data successfully uploaded.</returns>
     private async Task<bool> AddStationCountObservationData(CCDRSManagerViewModel vm)
     {
-        await Task.Run(() => { vm.AddStationCountObserationData(); });
+        await Task.Run(() => 
+        {
+            vm.SetTextBlockData("green", "Uploading StationCount data please wait"); 
+            vm.AddStationCountObserationData();
+            vm.SetTextBlockData("green", "Success and finished !");
+        });
         System.Windows.MessageBox.Show(this, "Successfully added station count observation data to the database. Press Finish and close the wizard.");
         return true;
     }
@@ -167,7 +179,7 @@ public partial class CCDRSWizard : Window
             }
             catch (Exception ex)
             {
-                vm.TextBlockData("red", ex.Message);
+                vm.SetTextBlockData("red", ex.Message);
             }
 
 

@@ -202,7 +202,6 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     public void DeleteSurveyData()
     {
         _ccdrsRepository.DeleteSurveyData(RegionId, SurveyYear);
-        TextBlockData("green", "Survey Data successfully deleted. Adding Survey Data.");
     }
 
     /// <summary>
@@ -211,7 +210,6 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     public void AddSurveyData()
     {
         _ccdrsRepository.AddSurveyData(RegionId, SurveyYear);
-        TextBlockData("green", "Survey data successfully Added. Now adding Station Data");
     }
 
     /// <summary>
@@ -220,7 +218,6 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     public void AddStationData()
     {
         _ccdrsRepository.AddStationData(StationFileName, RegionId);
-        TextBlockData("green", "Station data successfully Added");
     }
 
     /// <summary>
@@ -229,7 +226,6 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     public void AddSurveyStationData()
     {
         _ccdrsRepository.AddSurveyStationData(RegionId, SurveyYear);
-        TextBlockData("green", "Survey Station data successfully Added");
     }
 
     /// <summary>
@@ -237,9 +233,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     public void AddStationCountObserationData()
     {
-        TextBlockData("green", "Uploading StationCount data please wait");
         _ccdrsRepository.AddStationCountObservationData(StationCountObservationFile, RegionId, SurveyYear);
-        TextBlockData("green", "Success and finished !");
     }
 
     /// <summary>
@@ -255,7 +249,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// </summary>
     /// <param name="colour">The colour of the text e.g. red.</param>
     /// <param name="message">The message to display and write.</param>
-    public void TextBlockData(string colour, string message)
+    public void SetTextBlockData(string colour, string message)
     {
         TextColour = colour;
         TextMessage = message;
