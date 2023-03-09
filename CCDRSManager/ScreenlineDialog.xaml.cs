@@ -18,20 +18,11 @@ namespace CCDRSManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        //private void AddScreenlineSurvey(object sender, RoutedEventArgs e)
-        //{
-        //    if (DataContext is CCDRSManagerViewModel vm)
-        //    {
-        //        vm.AddScreenlineData();
-        //        //MessageBox.Show(this, "Successfully added screenline data.");
-        //    }
-        //}
-
         private async void AddScreenlineSurvey(object sender, RoutedEventArgs e)
         {
             if (DataContext is CCDRSManagerViewModel vm)
             {
-                await vm.StepsToAddScreenlineAsync();
+                await vm.AddScreenlineAsync();
             }
         }
 

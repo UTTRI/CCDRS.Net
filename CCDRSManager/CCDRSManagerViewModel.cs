@@ -305,7 +305,11 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         });
     }
 
-    public Task StepsToAddScreenlineAsync()
+    /// <summary>
+    /// Add screenline data of a given region.
+    /// </summary>
+    /// <returns></returns>
+    public Task AddScreenlineAsync()
     {
         return Task.Run(() =>
         {
