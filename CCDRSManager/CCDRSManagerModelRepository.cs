@@ -32,7 +32,7 @@ public partial class CCDRSManagerModelRepository
 {
     private readonly CCDRSContext _context;
     private readonly ObservableCollection<RegionModel> _regionsModel;
-    private ObservableCollection<VehicleCountTypeModel> _vehiclesModel;
+    private readonly ObservableCollection<VehicleCountTypeModel> _vehiclesModel;
 
     // Initialize the CCDRS class
     public CCDRSManagerModelRepository(CCDRSContext context)
@@ -585,7 +585,7 @@ public partial class CCDRSManagerModelRepository
     }
 
     /// <summary>
-    /// 
+    /// Get the VehicleCount Type object based on user specified id.
     /// </summary>
     /// <param name="vehicleCountTypeId"></param>
     /// <returns></returns>
