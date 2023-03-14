@@ -18,12 +18,10 @@ public class FileUtility
     /// <exception cref="Exception"></exception>
     public void CheckStationFileForErrors(string stationFileName)
     {
-        Console.WriteLine("this ran");
         // Loop through the station csv file
         using (var readFile = new StreamReader(stationFileName))
         {
             string? line;
-            string[] row;
             List<string> stationCodeList = new() { };
             readFile.ReadLine();
             int lineNumber = 0;
@@ -31,6 +29,7 @@ public class FileUtility
             // loop through the line
             while ((line = readFile.ReadLine()) is not null)
             {
+                string[] row;
                 lineNumber++;
                 row = line.Split(';');
                 string stationCode = row[0];
@@ -42,9 +41,9 @@ public class FileUtility
                 }
 
                 // station is null or not supplied
-                if (stationCode == "")
+                if (String.IsNullOrWhiteSpace(stationCode))
                 {
-                    throw new Exception($"Missing code {stationFileName} on line {lineNumber} Please Reupload \n");
+                    throw new Exception($"Missing station code {stationFileName} on line {lineNumber} Please Reupload \n");
                 }
 
                 //Duplicate data exists
@@ -71,13 +70,13 @@ public class FileUtility
         // read the screenline csv file
         using var readFile = new StreamReader(screenlineFileName);
         string? line;
-        string[] rowData;
         List<string> stationCodeList = new() { };
         int lineNumber = 0;
 
         // Loop through the remaining rows of data and insert the screenline data into the database.
         while ((line = readFile.ReadLine()) is not null)
         {
+            string[] rowData;
             lineNumber++;
             rowData = line.Split(',');
 
@@ -93,7 +92,7 @@ public class FileUtility
                 string stationCode = rowData[2];
 
                 // Screenline is null or not supplied
-                if (stationCode == "")
+                if (String.IsNullOrWhiteSpace(stationCode))
                 {
                     throw new Exception($"Missing station code {screenlineFileName} on line {lineNumber} Please Reupload \n");
                 }
@@ -125,7 +124,6 @@ public class FileUtility
         {
             int lineNumber = 0;
             string? line;
-            string[] rowData;
 
             List<Tuple<string, int>> stationCountTupleList = new() { };
 
@@ -135,7 +133,7 @@ public class FileUtility
             // Loop through the remaining rows of data and insert the observation data into the database.
             while ((line = readFile.ReadLine()) is not null)
             {
-
+                string[] rowData;
                 lineNumber++;
                 rowData = line.Split(',');
                 string stationCode = rowData[0];

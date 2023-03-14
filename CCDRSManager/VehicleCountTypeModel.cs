@@ -60,5 +60,7 @@ public class VehicleCountTypeModel : INotifyPropertyChanged
         CountType = vehicleCountType.CountType;
         VehicleId = vehicleCountType.VehicleId;
     }
+#pragma warning disable CS0067
     public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
 }
