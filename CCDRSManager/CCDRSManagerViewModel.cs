@@ -17,6 +17,7 @@ using CCDRSManager.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace CCDRSManager;
@@ -385,6 +386,10 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
                 // Turn on the progress bar.
                 IsRunning = true;
                 ClearChangeTracker();
+                SetTextBlockData("green", "Checking and validating Station file please wait...");
+                CheckStationFile();
+                SetTextBlockData("green", "Checking and validating StationCountObservation file please wait...");
+                CheckStationCountFile();
                 SetTextBlockData("green", "Deleting survey data if exists please wait...");
                 DeleteSurveyData();
                 SetTextBlockData("green", "Successfully deleted survey data.");
@@ -427,6 +432,9 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
                 // Turn on the progress bar.
                 IsRunning = true;
                 ClearChangeTracker();
+                SetTextBlockData("green", "Checking Screenline file for errors...");
+                CheckScreenlineFile();
+                SetTextBlockData("green", "Success");
                 SetTextBlockData("green", "Uploading Screenline data please wait...");
                 AddScreenlineData();
                 SetTextBlockData("green", "Screenline data successfully added. Click x to close the application");
@@ -513,5 +521,32 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         {
             SetTextBlockData("red", ex.Message);
         }
+    }
+
+    /// <summary>
+    /// Check if the station file is valid before doing database operations.
+    /// </summary>
+    public void CheckStationFile()
+    {
+        CCDRSManager.FileUtility fileUtility = new();
+        fileUtility.CheckStationFileForErrors(StationFileName);
+    }
+
+    /// <summary>
+    /// Check if the Screenline file is valid before doing any database operations.
+    /// </summary>
+    public void CheckScreenlineFile()
+    {
+        CCDRSManager.FileUtility fileUtility = new();
+        fileUtility.CheckScreenlineFile(ScreenlineFileName);
+    }
+
+    /// <summary>
+    /// Check if the StationCountObservation file is valid before doing any database operations.
+    /// </summary>
+    public void CheckStationCountFile()
+    {
+        CCDRSManager.FileUtility fileUtility = new();
+        fileUtility.CheckStationCountObservationFile(StationCountObservationFile);
     }
 }
