@@ -31,7 +31,7 @@ public class VehicleCountTypeModel : INotifyPropertyChanged
     /// <summary>
     /// Decription of the vehicle e.g. auto1.
     /// </summary>
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Number of occupants that can sit in the vehicle.

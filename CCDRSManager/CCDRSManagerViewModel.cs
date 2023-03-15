@@ -184,7 +184,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// <summary>
     /// Collection of all VehicleCountType objects.
     /// </summary>
-    private ObservableCollection<VehicleCountTypeModel> _vehicleCountTypes;
+    private ObservableCollection<VehicleCountTypeModel> _vehicleCountTypes { get; }
 
     /// <summary>
     /// Collection of VehicleCountType objects used to populate the combobox.
@@ -193,13 +193,13 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     {
         get
         {
-            return _vehicleCountTypes;
+            return new ObservableCollection<VehicleCountTypeModel>(_vehicleCountTypes);
         }
-        set
-        {
-            _vehicleCountTypes = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VehicleCountTypes)));
-        }
+        //set
+        //{
+        //    _vehicleCountTypes = value;
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VehicleCountTypes)));
+        //}
     }
 
     private int _vehicleCountTypeId;
@@ -236,7 +236,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    private int _countType;
+    private int _countType = 1;
     /// <summary>
     /// Set the value of the user selected Vehcilecounttypeid
     /// </summary>
@@ -253,7 +253,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _vehicleDescription;
+    private string _vehicleDescription = string.Empty;
 
     /// <summary>
     /// Description of vehicle e.g. auto1.
@@ -271,7 +271,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _vehicleName;
+    private string _vehicleName = string.Empty;
 
     /// <summary>
     /// Name of vehicle e.g. auto
@@ -295,7 +295,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     public CCDRSManagerViewModel()
     {
         Regions = _ccdrsRepository.Regions;
-        VehicleCountTypes = _ccdrsRepository.VehicleCountTypeModels;
+        //VehicleCountTypes = _ccdrsRepository.VehicleCountTypeModels;
     }
 
     /// <summary>
@@ -386,26 +386,30 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
                 // Turn on the progress bar.
                 IsRunning = true;
                 ClearChangeTracker();
-                SetTextBlockData("green", "Checking and validating Station file please wait...");
-                CheckStationFile();
-                SetTextBlockData("green", "Checking and validating StationCountObservation file please wait...");
-                CheckStationCountFile();
-                SetTextBlockData("green", "Deleting survey data if exists please wait...");
-                DeleteSurveyData();
-                SetTextBlockData("green", "Successfully deleted survey data.");
-                SetTextBlockData("green", "Attempting to add survey data to the database please wait...");
-                AddSurveyData();
-                SetTextBlockData("green", "Successfully added survey data");
-                SetTextBlockData("green", "Attempting to add Station Data please wait...");
-                AddStationData();
-                SetTextBlockData("green", "Successfully added station data");
-                SetTextBlockData("green", "Attempting to add surveystation data to the database please wait...");
-                AddSurveyStationData();
-                SetTextBlockData("green", "Successfully added surveystation data");
-                SetTextBlockData("green", "Attempting to add station Count observation data to the database please wait...");
-                AddStationCountObserationData();
-                SetTextBlockData("green", "Successfully added stationcount observation data");
-                SetTextBlockData("green", "Please click Finish button to close the application.");
+                // If the StationFile is valid continue processing remaining steps.
+                if (CheckStationFile())
+                {
+                    // If the stationcountobservation file is valid continue processing the steps.
+                    if (CheckStationCountFile())
+                    {
+                        SetTextBlockData("green", "Deleting survey data if exists please wait...");
+                        DeleteSurveyData();
+                        SetTextBlockData("green", "Successfully deleted survey data.");
+                        SetTextBlockData("green", "Attempting to add survey data to the database please wait...");
+                        AddSurveyData();
+                        SetTextBlockData("green", "Successfully added survey data");
+                        SetTextBlockData("green", "Attempting to add Station Data please wait...");
+                        AddStationData();
+                        SetTextBlockData("green", "Successfully added station data");
+                        SetTextBlockData("green", "Attempting to add surveystation data to the database please wait...");
+                        AddSurveyStationData();
+                        SetTextBlockData("green", "Successfully added surveystation data");
+                        SetTextBlockData("green", "Attempting to add station Count observation data to the database please wait...");
+                        AddStationCountObserationData();
+                        SetTextBlockData("green", "Successfully added stationcount observation data");
+                        SetTextBlockData("green", "Please click Finish button to close the application.");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -432,12 +436,14 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
                 // Turn on the progress bar.
                 IsRunning = true;
                 ClearChangeTracker();
-                SetTextBlockData("green", "Checking Screenline file for errors...");
-                CheckScreenlineFile();
-                SetTextBlockData("green", "Success");
-                SetTextBlockData("green", "Uploading Screenline data please wait...");
-                AddScreenlineData();
-                SetTextBlockData("green", "Screenline data successfully added. Click x to close the application");
+                if (CheckScreenlineFile())
+                {
+                    // Screenline file is valid now updating the database.
+                    SetTextBlockData("green", "Success now uploading Screenline data please wait...");
+                    AddScreenlineData();
+                    SetTextBlockData("green", "Screenline data successfully added. Click x to close the application");
+                }
+                
             }
             catch (Exception ex)
             {
@@ -514,8 +520,8 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
             SetTextBlockData("green", "updating vehicle information please wait...");
             _ccdrsRepository.UpdateVehicleData(SelectedVehicleCountType, SelectedVehicle, OccupancyNumber, CountType, VehicleDescription, VehicleName);
             SetTextBlockData("green", "Successfully updated Click x to close or continue");
-            VehicleCountTypes.Clear();
-            VehicleCountTypes = _ccdrsRepository.RebuildComboBox();
+            //VehicleCountTypes.Clear();
+            //VehicleCountTypes = _ccdrsRepository.RebuildComboBox();
         }
         catch (Exception ex)
         {
@@ -526,27 +532,58 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     /// <summary>
     /// Check if the station file is valid before doing database operations.
     /// </summary>
-    public void CheckStationFile()
+    /// <returns>True if the validations succeeds false if the validation fails.</returns>
+    public bool CheckStationFile()
     {
-        CCDRSManager.FileUtility fileUtility = new();
-        fileUtility.CheckStationFileForErrors(StationFileName);
-    }
-
-    /// <summary>
-    /// Check if the Screenline file is valid before doing any database operations.
-    /// </summary>
-    public void CheckScreenlineFile()
-    {
-        CCDRSManager.FileUtility fileUtility = new();
-        fileUtility.CheckScreenlineFile(ScreenlineFileName);
+        SetTextBlockData("green", "Checking and validating Station file please wait...");
+        bool isValid = _ccdrsRepository.ValidateStationFile(StationFileName, out var message);
+        if (isValid)
+        {
+            SetTextBlockData("green", "Success no errors found in station file...");
+            return true;
+        }
+        else
+        {
+            SetTextBlockData("red", message);
+            return false;
+        }
     }
 
     /// <summary>
     /// Check if the StationCountObservation file is valid before doing any database operations.
     /// </summary>
-    public void CheckStationCountFile()
+    public bool CheckStationCountFile()
     {
-        CCDRSManager.FileUtility fileUtility = new();
-        fileUtility.CheckStationCountObservationFile(StationCountObservationFile);
+        SetTextBlockData("green", "Checking and validating StationCountObservation file please wait...");
+        bool isValid = _ccdrsRepository.ValidateStationCountObservationFile(StationCountObservationFile, out string? message);
+        if (isValid)
+        {
+            SetTextBlockData("green", "Success no errors found in stationcountobservation file...");
+            return true;
+        }
+        else
+        {
+            SetTextBlockData("red", message);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Check if the Screenline file is valid before doing any database operations.
+    /// </summary>
+    public bool CheckScreenlineFile()
+    {
+        SetTextBlockData("green", "Checking Screenline file for errors...");
+        _ccdrsRepository.ValidateScreenlineFile(ScreenlineFileName, out var message);
+        if (message == string.Empty)
+        {
+            SetTextBlockData("green", "Success no errors found in screenline file...");
+            return true;
+        }
+        else
+        {
+            SetTextBlockData("red", message);
+            return false;
+        }
     }
 }
