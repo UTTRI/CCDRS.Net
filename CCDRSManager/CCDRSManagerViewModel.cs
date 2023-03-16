@@ -425,7 +425,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// VehicleCountTypeViewModel to 
+    /// VehicleCountTypeViewModel Class that keeps a copy of the VehicleCountType object.
     /// </summary>
     public class VehicleCountTypeViewModel : INotifyPropertyChanged
     {
@@ -485,7 +485,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
 
         /// <summary>
-        /// Vehicle Name.
+        /// Name of Vehicle.
         /// </summary>
         public string VehicleName => _model?.VehicleName ?? "no vehicle selected";
 
