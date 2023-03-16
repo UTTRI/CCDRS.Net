@@ -16,12 +16,9 @@
 using CCDRSManager.Data;
 using CCDRSManager.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CCDRSManager;
@@ -40,7 +37,7 @@ public partial class CCDRSManagerModelRepository
     {
         _context = context;
         _regionsModel = new ObservableCollection<RegionModel>(_context.Regions.Select(r => new RegionModel(r)));
-        _vehiclesModel = new ObservableCollection<VehicleCountTypeModel>(_context.VehicleCountTypes.Select(r => new VehicleCountTypeModel(r)));
+        _vehiclesModel = new ObservableCollection<VehicleCountTypeModel>(_context.VehicleCountTypes.Include(vc => vc.Vehicle).Select(r => new VehicleCountTypeModel(r)));
     }
 
     /// <summary>
@@ -224,7 +221,7 @@ public partial class CCDRSManagerModelRepository
     }
 
     /// <summary>
-    /// Checks if a vehicle_count_type object exists based on a given vehicle id and occupancy number.
+    /// Checks if a VehiclCountObjectType object exists based on a given vehicle id and occupancy number.
     /// </summary>
     /// <param name="vehicleId">Primary key of vehicle.</param>
     /// <param name="occupancy">Number of occupants that can sit in vehicle.</param>
@@ -533,7 +530,7 @@ public partial class CCDRSManagerModelRepository
         // Find the station object in the data.
         Station? station = _context.Stations.FirstOrDefault(s => s.StationCode == stationCode && s.RegionId == regionId);
 
-        if (station is not null)
+        if (station is not null && screenline is not null)
         {
             // Create a new ScreenlineStation object.
             ScreenlineStation newScreenlineStation = new()
@@ -599,27 +596,18 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="vehicleId"></param>
     /// <returns></returns>
-    public Vehicle GetVehicleData(int vehicleId)
+    public Vehicle? GetVehicleData(int vehicleId)
     {
-        return _context.Vehicles.Where(v => v.Id == vehicleId).First();
+        return _context.Vehicles.Where(v => v.Id == vehicleId).FirstOrDefault();
     }
 
     /// <summary>
     /// Update the VehicleCountType object in the datbase with the new user provided values.
     /// </summary>
     /// <param name="selectedVehicleCountType">VehicleCountType object to update.</param>
-    /// <param name="selectedVehicle">Vehicle object of selected VehicleCountType object.</param>
-    /// <param name="occupancyNumber">New occupancy number.</param>
-    /// <param name="countType">New counttype.</param>
-    /// <param name="vehicleDescription">New vehicle description.</param>
-    /// <param name="vehicleName">New vehicle name.</param>
-    public void UpdateVehicleData(VehicleCountType selectedVehicleCountType, Vehicle selectedVehicle, int occupancyNumber, int countType, string vehicleDescription, string vehicleName)
+    public void UpdateVehicleData(VehicleCountTypeModel selectedVehicleCountType)
     {
-        var item = _context.VehicleCountTypes.Find(selectedVehicleCountType.Id);
-        item.Description = vehicleDescription;
-        item.Occupancy = occupancyNumber;
-        item.CountType = countType;
-        _context.SaveChanges();
+        Save();
     }
 
     /// <summary>
@@ -652,13 +640,12 @@ public partial class CCDRSManagerModelRepository
     /// <param name="stationFileName">FilePath to station file.</param>
     /// <param name="refError"></param>
     /// <returns></returns>
-    public bool ValidateStationFile(string stationFileName, [NotNullWhen(false)] out string refError)
+    public static bool ValidateStationFile(string stationFileName, [NotNullWhen(false)] out string refError)
     {
         // Loop through the station csv file
         using var readFile = new StreamReader(stationFileName);
-        string? line;
-        List<string> stationCodeList = new() { };
-        readFile.ReadLine();
+        List<string> stationCodeList = new();
+        string? line = readFile.ReadLine();
         int lineNumber = 0;
         refError = string.Empty;
 
@@ -703,7 +690,7 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="rowData"></param>
     /// <returns></returns>
-    private bool ValidateStationCountObservationData(string[] rowData)
+    private static bool ValidateStationCountObservationData(string[] rowData)
     {
         //check if any empty cells exists.
         if (rowData.Any(s => string.IsNullOrEmpty(s)))
@@ -722,7 +709,7 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="stationCountObservationFile">File path to StationCountObservation file.</param>
     /// <exception cref="Exception"></exception>
-    public bool ValidateStationCountObservationFile(string stationCountObservationFile, [NotNullWhen(false)] out string refError)
+    public static bool ValidateStationCountObservationFile(string stationCountObservationFile, [NotNullWhen(false)] out string refError)
     {
         // read the station_count_observation ccdrs csv file
         using var readFile = new StreamReader(stationCountObservationFile);
@@ -792,7 +779,7 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="screenlineFileName">File path to the screenline file.</param>
     /// <exception cref="Exception"></exception>
-    public bool ValidateScreenlineFile(string screenlineFileName, [NotNullWhen(false)] out string refError)
+    public static bool ValidateScreenlineFile(string screenlineFileName, [NotNullWhen(false)] out string refError)
     {
         // read the screenline csv file
         using var readFile = new StreamReader(screenlineFileName);
@@ -821,13 +808,14 @@ public partial class CCDRSManagerModelRepository
                     refError = "Missing station code " + screenlineFileName + " on line " + lineNumber + "Please Reupload \n";
                     return false;
                 }
+
                 // Screenline code is null or not supplied
-                //bool res = CheckScreenlineIsNullOrEmpty(slineCode);
                 if (ValidateScreenlineCode(slineCode) == false)
                 {
                     refError = "Missing screenline code " + screenlineFileName + " on line " + lineNumber + " Please Reupload \n";
                     return false;
                 }
+                
                 // Duplicate data exists
                 if (stationCodeList.Contains(stationCode))
                 {
