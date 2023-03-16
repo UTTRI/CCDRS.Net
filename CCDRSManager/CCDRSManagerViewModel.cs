@@ -181,10 +181,8 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    /// <summary>
-    /// Collection of all VehicleCountType objects.
-    /// </summary>
-    private ObservableCollection<VehicleCountTypeModel> _vehicleCountTypes { get; }
+    
+    private ObservableCollection<VehicleCountTypeModel> _vehicleCountTypes { get; set; }
 
     /// <summary>
     /// Collection of VehicleCountType objects used to populate the combobox.
@@ -193,18 +191,18 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     {
         get
         {
-            return new ObservableCollection<VehicleCountTypeModel>(_vehicleCountTypes);
+            return _vehicleCountTypes; // new ObservableCollection<VehicleCountTypeModel>(_vehicleCountTypes);
         }
-        //set
-        //{
-        //    _vehicleCountTypes = value;
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VehicleCountTypes)));
-        //}
+        set
+        {
+            _vehicleCountTypes = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VehicleCountTypes)));
+        }
     }
 
     private int _vehicleCountTypeId;
     /// <summary>
-    /// Set the value of the user selected Vehcilecounttypeid
+    /// Set the value of the user selected VehicleCountTypeId
     /// </summary>
     public int VehicleCountTypeId
     {
@@ -295,7 +293,7 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     public CCDRSManagerViewModel()
     {
         Regions = _ccdrsRepository.Regions;
-        //VehicleCountTypes = _ccdrsRepository.VehicleCountTypeModels;
+        VehicleCountTypes = _ccdrsRepository.VehicleCountTypeModels;
     }
 
     /// <summary>

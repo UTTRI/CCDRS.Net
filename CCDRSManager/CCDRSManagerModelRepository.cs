@@ -652,7 +652,7 @@ public partial class CCDRSManagerModelRepository
     /// <param name="stationFileName">FilePath to station file.</param>
     /// <param name="refError"></param>
     /// <returns></returns>
-    public bool ValidateStationFile(string stationFileName, [NotNullWhen(false)] out string? refError)
+    public bool ValidateStationFile(string stationFileName, [NotNullWhen(false)] out string refError)
     {
         // Loop through the station csv file
         using var readFile = new StreamReader(stationFileName);
@@ -722,11 +722,8 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="stationCountObservationFile">File path to StationCountObservation file.</param>
     /// <exception cref="Exception"></exception>
-    public bool ValidateStationCountObservationFile(string stationCountObservationFile, [NotNullWhen(false)] out string? refError)
+    public bool ValidateStationCountObservationFile(string stationCountObservationFile, [NotNullWhen(false)] out string refError)
     {
-        // extract the header of the ccdrs file.
-        string[] headerLine;
-
         // read the station_count_observation ccdrs csv file
         using var readFile = new StreamReader(stationCountObservationFile);
         int lineNumber = 0;
@@ -737,7 +734,7 @@ public partial class CCDRSManagerModelRepository
         List<Tuple<string, int>> stationCountTupleList = new() { };
 
         // Extract the header of the csv file which contains the columns of vehicle types.
-        headerLine = readFile.ReadLine()?.Split(',') ?? throw new Exception("No header file found");
+        _ = readFile.ReadLine()?.Split(',') ?? throw new Exception("No header file found");
 
         // Loop through the remaining rows of data and insert the observation data into the database.
         while ((line = readFile.ReadLine()) is not null)
@@ -795,7 +792,7 @@ public partial class CCDRSManagerModelRepository
     /// </summary>
     /// <param name="screenlineFileName">File path to the screenline file.</param>
     /// <exception cref="Exception"></exception>
-    public bool ValidateScreenlineFile(string screenlineFileName, [NotNullWhen(false)] out string? refError)
+    public bool ValidateScreenlineFile(string screenlineFileName, [NotNullWhen(false)] out string refError)
     {
         // read the screenline csv file
         using var readFile = new StreamReader(screenlineFileName);

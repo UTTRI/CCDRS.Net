@@ -29,7 +29,7 @@ public class VehicleCountTypeModel : INotifyPropertyChanged
     public int Id { get; set; }
 
     /// <summary>
-    /// Decription of the vehicle e.g. auto1.
+    /// Description of the vehicle e.g. auto1.
     /// </summary>
     public string Description { get; set; } = string.Empty;
 
