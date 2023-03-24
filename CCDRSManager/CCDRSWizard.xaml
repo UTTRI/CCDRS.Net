@@ -47,7 +47,6 @@
                         with a header called #station;description. 
                         The file should be separated with semi-colons.
                     </TextBox>
-                    <Label></Label>
                     <Button x:Name="OpenStationFile"
                         Content="Upload Station File"
                         Click="OpenStationFileDialog"/>
