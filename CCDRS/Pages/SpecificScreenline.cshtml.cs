@@ -330,7 +330,7 @@ namespace CCDRS.Pages
                       );
 
             // Get the minimum and maximum timestamps from the selected dataset.
-            var minimumStartTime = datalist.Min(x => x.Time);
+            var minimumStartTime = Utility.CalculateStartTime(datalist.Min(x => x.Time));
             var maximumEndTime = datalist.Max(x => x.Time);
 
             foreach (var item in datalist)

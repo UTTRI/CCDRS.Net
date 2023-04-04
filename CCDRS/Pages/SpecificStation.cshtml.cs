@@ -316,7 +316,7 @@ namespace CCDRS.Pages
                                 stations.RegionId == RegionId &
                                 stations.Id == selectedStationId &
                                 surveys.Id == SelectedSurveyId &
-                                stationCounts.Time > startTime & stationCounts.Time <= endTime &
+                                stationCounts.Time >= startTime & stationCounts.Time <= endTime &
                                 individualCategorySelect.Contains(vehicleCountTypes.Id)
                             group new { stationCounts, vehicleCountTypes, stations, vehicles } 
                             by new { stations.StationCode, vehicles.Name, vehicleCountTypes.Occupancy, 
@@ -333,7 +333,7 @@ namespace CCDRS.Pages
                       );
 
             // Get the minimum and maximum timestamps from the selected dataset.
-            var minimumStartTime = dataList.Min(x => x.Time);
+            var minimumStartTime = Utility.CalculateStartTime(dataList.Min(x => x.Time));
             var maximumEndTime = dataList.Max(x => x.Time);
 
             foreach (var item in dataList)
