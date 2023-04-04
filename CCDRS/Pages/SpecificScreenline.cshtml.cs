@@ -158,7 +158,7 @@ namespace CCDRS.Pages
             if (trafficVolumeRadioButtonSelect == 1)
             {
                 // Build the header of the content file
-                builder.Append(regionName?.Name);
+                builder.Append(regionName?.Name ?? "Unknown Region");
                 builder.Append(' ');
                 builder.Append(surveyYear?.Year);
                 builder.AppendLine();
@@ -181,7 +181,7 @@ namespace CCDRS.Pages
             else
             {
                 // Build the header of the content file
-                builder.Append(regionName?.Name);
+                builder.Append(regionName?.Name ?? "Unknown Region");
                 builder.Append(' ');
                 builder.Append(surveyYear?.Year);
                 builder.AppendLine();
