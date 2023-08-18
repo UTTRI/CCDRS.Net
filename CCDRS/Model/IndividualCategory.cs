@@ -70,6 +70,7 @@ public sealed class IndividualCategory
 
     enum TechnologyCount
     {
+        Unknown = 0,
         TechnologyCounts = 1, // Filter all remaining technologies not the two below
         VehicleCounts = 2, // Filter the total vehicle counts 
         PersonCounts = 3 // Filter the total person counts 
@@ -109,9 +110,14 @@ public sealed class IndividualCategory
     /// <param name="technologies">List of selected technologies for selected survey</param>
     /// <param name="countType"></param>
     /// <returns></returns>
-    private static IList<IndividualCategory> GetSpecificTechnologies(IList<IndividualCategory> technologies, int countType)
+    private static IList<IndividualCategory> GetSpecificTechnologies(IList<IndividualCategory> technologies,
+        TechnologyCount countType)
     {
-        return technologies.Where(s => s.CountType == countType).ToList();
+        if (!Enum.IsDefined(countType))
+        {
+            throw new ArgumentException($"Invalid {nameof(TechnologyCount)} type used.", nameof(countType));
+        }
+        return technologies.Where(s => s.CountType == (int)countType).ToList();
     }
 
     /// <summary>
@@ -121,7 +127,7 @@ public sealed class IndividualCategory
     /// <returns>A list of the individual categories of total vehicles.</returns>
     public static IList<IndividualCategory> GetTotalVehicleCounts(IList<IndividualCategory> technologies)
     {
-        return GetSpecificTechnologies(technologies, (int)TechnologyCount.VehicleCounts);
+        return GetSpecificTechnologies(technologies, TechnologyCount.VehicleCounts);
     }
 
     /// <summary>
@@ -131,7 +137,7 @@ public sealed class IndividualCategory
     /// <returns></returns>
     public static IList<IndividualCategory> GetTotalPersonCounts(IList<IndividualCategory> technologies)
     {
-        return GetSpecificTechnologies(technologies, (int)TechnologyCount.PersonCounts);
+        return GetSpecificTechnologies(technologies, TechnologyCount.PersonCounts);
     }
 
     /// <summary>
@@ -141,6 +147,6 @@ public sealed class IndividualCategory
     /// <returns></returns>
     public static IList<IndividualCategory> GetTechnologyCounts(IList<IndividualCategory> technologies)
     {
-        return GetSpecificTechnologies(technologies, (int)TechnologyCount.TechnologyCounts);
+        return GetSpecificTechnologies(technologies, TechnologyCount.TechnologyCounts);
     }
 }
