@@ -115,7 +115,7 @@ public sealed class IndividualCategory
     }
 
     /// <summary>
-    /// Method to return the total vehicle count technologies for selected survey. 
+    /// Return the total vehicle count technologies for selected survey. 
     /// </summary>
     /// <param name="technologies">List of selected technologies for selected survey</param>
     /// <returns>A list of the individual categories of total vehicles.</returns>
