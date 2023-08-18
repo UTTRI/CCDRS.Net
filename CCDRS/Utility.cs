@@ -89,17 +89,6 @@ public static class Utility
     }
 
     /// <summary>
-    /// General Method to query the individual_category table and return the filtered technologies based on the counttype
-    /// </summary>
-    /// <param name="technologies">List of selected technologies for selected survey</param>
-    /// <param name="countType"></param>
-    /// <returns></returns>
-    private static IList<IndividualCategory> GetSpecificTechnologies(IList<IndividualCategory> technologies, int countType)
-    {
-        return technologies.Where(s=> s.CountType == countType).ToList();
-    }
-
-    /// <summary>
     /// Method to convert DMG Time to minutes
     /// </summary>
     /// <param name="DMGTime">the DMG Start Time</param>

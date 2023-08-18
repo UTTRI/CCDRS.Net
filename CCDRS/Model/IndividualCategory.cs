@@ -28,13 +28,12 @@ public sealed class IndividualCategory
     }
 
     /// <summary>
-    /// primary key of individual category table. 
-    /// It is needed for the DbSet in the contextservice to work.
+    /// Primary key of individual category table. It is needed for the DbSet in the context service to work.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// The number of occupants that can sit in a vehicle.
+    /// The number of people that are sitting.
     /// </summary>
     public int OccupancyId { get; set; }
 
@@ -80,15 +79,15 @@ public sealed class IndividualCategory
     /// Get the list of Individual categories that exist for a given survey.
     /// </summary>
     /// <param name="selectedSurveyId">The surveyId to filter the subset of the technologies available.</param>
-    /// <param name="_context">The context service to access the database tables.</param>
+    /// <param name="context">The context service to access the database tables.</param>
     /// <returns></returns>
-    public static IList<IndividualCategory> GetIndividualCategoriesBasedOnSurvey(int selectedSurveyId, CCDRSContext _context)
+    public static IList<IndividualCategory> GetIndividualCategoriesBasedOnSurvey(int selectedSurveyId, CCDRSContext context)
     {
-        return (from vehiclecounttypes in _context.VehicleCountTypes
-                        join stationcountobserverations in _context.StationCountObservations on vehiclecounttypes.Id equals stationcountobserverations.VehicleCountTypeId
-                        join surveystations in _context.SurveyStations on stationcountobserverations.SurveyStationId equals surveystations.Id
-                        join surveys in _context.Surveys on surveystations.SurveyId equals surveys.Id
-                        join vehicles in _context.Vehicles on vehiclecounttypes.VehicleId equals vehicles.Id
+        return (from vehiclecounttypes in context.VehicleCountTypes
+                        join stationCountObserverations in context.StationCountObservations on vehiclecounttypes.Id equals stationCountObserverations.VehicleCountTypeId
+                        join surveyStations in context.SurveyStations on stationCountObserverations.SurveyStationId equals surveyStations.Id
+                        join surveys in context.Surveys on surveyStations.SurveyId equals surveys.Id
+                        join vehicles in context.Vehicles on vehiclecounttypes.VehicleId equals vehicles.Id
                         where
                             surveys.Id == selectedSurveyId
                         select new IndividualCategory()
@@ -126,7 +125,7 @@ public sealed class IndividualCategory
     }
 
     /// <summary>
-    /// Method to return the total person count technologies for selected survey.
+    /// Returns the total person count technologies for selected survey.
     /// </summary>
     /// <param name="technologies">List of selected technologies for selected survey</param>
     /// <returns></returns>
@@ -136,7 +135,7 @@ public sealed class IndividualCategory
     }
 
     /// <summary>
-    /// Method to return the technologies available for selected survey.
+    /// Returns the technologies available for selected survey.
     /// </summary>
     /// <param name="technologies">List of selected technologies for selected survey</param>
     /// <returns></returns>
