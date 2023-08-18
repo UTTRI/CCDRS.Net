@@ -46,11 +46,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Block pages and ensure all pages require authentication.
 builder.Services.AddRazorPages(options =>
     {
-        //options.Conventions.AuthorizePage("/Index");
-        //options.Conventions.AuthorizePage("/AllStation");
-        //options.Conventions.AuthorizePage("/AllScreenline");
-        //options.Conventions.AuthorizePage("/SpecificStation");
-        //options.Conventions.AuthorizePage("/SpecificScreenline");
+        options.Conventions.AuthorizePage("/Index");
+        options.Conventions.AuthorizePage("/AllStation");
+        options.Conventions.AuthorizePage("/AllScreenline");
+        options.Conventions.AuthorizePage("/SpecificStation");
+        options.Conventions.AuthorizePage("/SpecificScreenline");
     }
 );
 
