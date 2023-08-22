@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:CCDRSManager"
         mc:Ignorable="d"
         WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
         Title="Sort Vehicle" Height="450" Width="300">
     <Window.DataContext>
         <local:CCDRSManagerViewModel />
