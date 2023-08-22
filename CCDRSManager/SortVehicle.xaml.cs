@@ -51,5 +51,8 @@ public partial class SortVehicle : Window
         {
             viewModel.SaveVehicleOrder();
         }
+
+        // close the dialog upon successful addition to the database.
+        this.Close();
     }
 }

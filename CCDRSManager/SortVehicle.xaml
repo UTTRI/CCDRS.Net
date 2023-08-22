@@ -46,9 +46,5 @@
         <Button Content="Up" Grid.Row="0" Grid.Column="0" Click="MoveVehicleUp" />
         <Button Content="Down" Grid.Row="1" Grid.Column="0" Click="MoveVehicleDown" />
         <Button Content="Save" Grid.Row="2" Grid.Column="0" Click="SaveSortedVehicleData" />
-        <ScrollViewer Grid.Row="3" Grid.Column="0" VerticalScrollBarVisibility="Auto">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  TextWrapping="Wrap" Name="errorMessage" Foreground="{Binding TextColour}" 
-                               FontWeight="Bold" Text="{Binding TextMessage}" />
-        </ScrollViewer>
     </Grid>
 </Window>

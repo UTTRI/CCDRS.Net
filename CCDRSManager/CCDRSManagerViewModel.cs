@@ -701,7 +701,5 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
     public void SaveVehicleOrder()
     {
         _ccdrsRepository.SaveVehicleOrder(_sortVehicles);
-        SetTextBlockData("green", "Successfully updated the vehicle hierarchy and display order." +
-            " Please click X button to close the Window.");
     }
 }
