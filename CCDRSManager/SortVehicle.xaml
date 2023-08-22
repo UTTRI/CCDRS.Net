@@ -9,9 +9,46 @@
     <Window.DataContext>
         <local:CCDRSManagerViewModel />
     </Window.DataContext>
-    
+
     <Grid>
-        <TextBlock Text="sort vehicle " />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                      Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+            <StackPanel>
+                <ListView x:Name="SortVehicleList" ItemsSource="{Binding SortVehicles}" 
+                          SelectedValue="Id" >
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Individual Category Information">
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="Id" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Vehicle" Width="100" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=DisplayOrder}" Header="display order" Width="100"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <ComboBox ItemsSource="{Binding SortVehicleModels }" 
+                                  SelectedValuePath="Id" 
+                              DisplayMemberPath="Name"
+                              IsEditable="False" />
+                </StackPanel>
+            </ScrollViewer>
+        <Button Content="Up" Grid.Row="0" Grid.Column="0" Click="MoveVehicleUp" />
+        <Button Content="Down" Grid.Row="1" Grid.Column="0" Click="MoveVehicleDown" />
+        <Button Content="Save" Grid.Row="2" Grid.Column="0" Click="SaveSortedVehicleData" />
+        <ScrollViewer Grid.Row="3" Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  TextWrapping="Wrap" Name="errorMessage" Foreground="{Binding TextColour}" 
+                               FontWeight="Bold" Text="{Binding TextMessage}" />
+        </ScrollViewer>
     </Grid>
 </Window>

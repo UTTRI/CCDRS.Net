@@ -12,6 +12,9 @@ public class SortVehicleModel : INotifyPropertyChanged
 {
     private readonly Vehicle _vehicle;
 
+    /// <summary>
+    /// Primary serial key of type int that is auto generated
+    /// </summary>
     public int Id
     {
         get
@@ -25,6 +28,9 @@ public class SortVehicleModel : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Name of the vehicle
+    /// </summary>
     public string Name
     {
         get
@@ -38,6 +44,9 @@ public class SortVehicleModel : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Display order number used to determine the hierarchy of the technologies to display in the list.
+    /// </summary>
     public int DisplayOrder
     {
         get
@@ -49,6 +58,15 @@ public class SortVehicleModel : INotifyPropertyChanged
             _vehicle.DisplayOrder = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayOrder)));
         }
+    }
+    
+    /// <summary>
+    /// Initialize the constructor.
+    /// </summary>
+    /// <param name="vehicle"></param>
+    public SortVehicleModel(Vehicle vehicle)
+    {
+        _vehicle = vehicle;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
