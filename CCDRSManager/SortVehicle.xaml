@@ -5,46 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CCDRSManager"
         mc:Ignorable="d"
-        Title="SortVehicle" Height="450" Width="800">
+        WindowStyle="ToolWindow"
+        Title="Sort Vehicle" Height="450" Width="300">
     <Window.DataContext>
         <local:CCDRSManagerViewModel />
     </Window.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto"
-                      Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
-            <StackPanel>
+        <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
                 <ListView x:Name="SortVehicleList" ItemsSource="{Binding SortVehicles}" 
-                          SelectedValue="Id" >
-                        <ListView.View>
-                            <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Individual Category Information">
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="Id" Width="100"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Vehicle" Width="100" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=DisplayOrder}" Header="display order" Width="100"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <ComboBox ItemsSource="{Binding SortVehicleModels }" 
-                                  SelectedValuePath="Id" 
-                              DisplayMemberPath="Name"
-                              IsEditable="False" />
-                </StackPanel>
-            </ScrollViewer>
-        <Button Content="Up" Grid.Row="0" Grid.Column="0" Click="MoveVehicleUp" />
-        <Button Content="Down" Grid.Row="1" Grid.Column="0" Click="MoveVehicleDown" />
-        <Button Content="Save" Grid.Row="2" Grid.Column="0" Click="SaveSortedVehicleData" />
+                          SelectedValue="Id" Grid.RowSpan="2" >
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Individual Category Information">
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Vehicle" Width="100" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Content="Up" Margin="5" Grid.Row="0" Grid.Column="1" Click="MoveVehicleUp" />
+                <Button Content="Down" Margin="5" Grid.Row="1" Grid.Column="1" Click="MoveVehicleDown" />
+            </Grid>
+
+        </GroupBox>
+
+        <Button Content="Save" Margin="5" Grid.Row="2" Grid.Column="1" Width="100" Height="30" Click="SaveSortedVehicleData" />
+        <Button Content="Cancel" Margin="5" Grid.Row="2" Grid.Column="2" Width="100" Height="30"  Click="Cancel" />
     </Grid>
 </Window>

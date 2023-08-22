@@ -55,4 +55,9 @@ public partial class SortVehicle : Window
         // close the dialog upon successful addition to the database.
         this.Close();
     }
+
+    private void Cancel(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
 }
