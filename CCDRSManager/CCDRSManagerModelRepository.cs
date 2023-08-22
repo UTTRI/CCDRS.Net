@@ -50,11 +50,17 @@ public partial class CCDRSManagerModelRepository
         get => new(_regionsModel);
     }
 
+    /// <summary>
+    /// Property to get a list of all VehicleCountTypes that exist in the database.
+    /// </summary>
     public ObservableCollection<VehicleCountTypeModel> VehicleCountTypeModels
     {
         get => new(_vehiclesModel);
     }
-
+    
+    /// <summary>
+    /// Property to get a list of all Vehicles that exist in the database.
+    /// </summary>
     public ObservableCollection<SortVehicleModel> SortVehicleModels
     {
         get => new(_sortVehiclesModel);
@@ -804,10 +810,10 @@ public partial class CCDRSManagerModelRepository
     /// <param name="newSortedVehicles">Collection of the SortVehicle model</param>
     public void SaveVehicleOrder(ObservableCollection<SortVehicleModel> newSortedVehicles)
     {
-        foreach(var vehicle in newSortedVehicles)
+        for(int i = 0; i < newSortedVehicles.Count; i++)
         {
-            Vehicle updateVehicle = _context.Vehicles.Where(v=> v.Id == vehicle.Id).First();
-            updateVehicle.DisplayOrder = newSortedVehicles.IndexOf(vehicle);
+            Vehicle updateVehicle = _context.Vehicles.First(v => v.Id == newSortedVehicles[i].Id);
+            updateVehicle.DisplayOrder = i;
         }
 
         // Save the context to the database.

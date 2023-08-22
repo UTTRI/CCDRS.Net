@@ -645,6 +645,9 @@ public class CCDRSManagerViewModel : INotifyPropertyChanged
 
     private SortVehicleModel? _sortVehicleModel;
 
+    /// <summary>
+    /// ServiceVehicleModel Property to get and set the display order of the vehicle.
+    /// </summary>
     public SortVehicleModel? SortVehicleModel
     {
         get

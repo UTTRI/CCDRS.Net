@@ -41,7 +41,7 @@ public partial class SortVehicle : Window
     }
 
     /// <summary>
-    /// Save the updated vehicle order to the datbase.
+    /// Save the updated vehicle order to the database.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

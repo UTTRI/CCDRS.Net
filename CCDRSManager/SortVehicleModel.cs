@@ -1,10 +1,5 @@
 ﻿using CCDRSManager.Model;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CCDRSManager;
 
@@ -59,9 +54,9 @@ public class SortVehicleModel : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayOrder)));
         }
     }
-    
+
     /// <summary>
-    /// Initialize the constructor.
+    /// Initialize the SortVehicleModel.
     /// </summary>
     /// <param name="vehicle"></param>
     public SortVehicleModel(Vehicle vehicle)
