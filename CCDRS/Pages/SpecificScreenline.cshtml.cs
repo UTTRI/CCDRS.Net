@@ -371,71 +371,71 @@ namespace CCDRS.Pages
                       ).ToList();
             var builder = new StringBuilder();
 
-            if (datalist.Count > 0)
+            if (datalist.Count <= 0)
             {
-                // Get the minimum and maximum timestamps from the selected dataset.
-                var minimumStartTime = Utility.CalculateStartTime(datalist.Min(x => x.Time));
-                var maximumEndTime = datalist.Max(x => x.Time);
-                // Get the sum records the number of fifteen minute intervals between the min and max time.
-                var sumRecord = ((Utility.FromDMGTimeToMinutes(maximumEndTime) - Utility.FromDMGTimeToMinutes(minimumStartTime)) / 15) + 1;
-                //Get the number of stations associated with a screenline grouped by the station direction.
-                var checkSums = (from regions in _context.Regions
-                                 join surveys in _context.Surveys on regions.Id equals surveys.RegionId
-                                 join stations in _context.Stations on regions.Id equals stations.RegionId
-                                 join screenlines in _context.Screenlines on regions.Id equals screenlines.RegionId
+                return string.Empty;
+            }
 
-                                 join screenlineStations in _context.ScreenlineStations on
-                                 new { ScreenlineId = screenlines.Id, StationId = stations.Id }
-                                 equals new { ScreenlineId = screenlineStations.ScreenlineId, StationId = screenlineStations.StationId }
-                                 join surveyStations in _context.SurveyStations on new { StationId = stations.Id, SurveyId = surveys.Id }
-                                 equals new { surveyStations.StationId, surveyStations.SurveyId }
-                                 where regions.Id == RegionId
-                                      && surveys.Id == SelectedSurveyId
-                                 group new { regions, surveys, stations, screenlines, screenlineStations, surveyStations }
-                                 by new { screenlines.SlineCode, stations.Direction }
-                           into newgrp
-                                 select new
-                                 {
-                                     Sline = newgrp.Key.SlineCode,
-                                     Direction = newgrp.Key.Direction,
-                                     SumRecords = newgrp.Count()
-                                 }
-                    ).ToDictionary(entry => (entry.Sline, entry.Direction), entry => entry.SumRecords);
-                foreach (var item in datalist)
-                {
-                    if (!newlist.TryGetValue((item.SlineCode, item.Direction), out var counts))
-                    {
-                        newlist[(item.SlineCode, item.Direction)] = counts = new int[individualCategorySelect.Length];
-                    }
-                    counts[Array.IndexOf(individualCategorySelect, item.VehicleCountTypeId)] += item.Observations;
-                }
+            // Get the minimum and maximum timestamps from the selected dataset.
+            var minimumStartTime = Utility.CalculateStartTime(datalist.Min(x => x.Time));
+            var maximumEndTime = datalist.Max(x => x.Time);
+            // Get the sum records the number of fifteen minute intervals between the min and max time.
+            var sumRecord = ((Utility.FromDMGTimeToMinutes(maximumEndTime) - Utility.FromDMGTimeToMinutes(minimumStartTime)) / 15) + 1;
+            //Get the number of stations associated with a screenline grouped by the station direction.
+            var checkSums = (from regions in _context.Regions
+                             join surveys in _context.Surveys on regions.Id equals surveys.RegionId
+                             join stations in _context.Stations on regions.Id equals stations.RegionId
+                             join screenlines in _context.Screenlines on regions.Id equals screenlines.RegionId
 
-                //var builder = new StringBuilder();
-                foreach (var item in from x in newlist.Keys
-                                     orderby x.screenlinename
-                                     select x
-                                     )
+                             join screenlineStations in _context.ScreenlineStations on
+                             new { ScreenlineId = screenlines.Id, StationId = stations.Id }
+                             equals new { ScreenlineId = screenlineStations.ScreenlineId, StationId = screenlineStations.StationId }
+                             join surveyStations in _context.SurveyStations on new { StationId = stations.Id, SurveyId = surveys.Id }
+                             equals new { surveyStations.StationId, surveyStations.SurveyId }
+                             where regions.Id == RegionId
+                                  && surveys.Id == SelectedSurveyId
+                             group new { regions, surveys, stations, screenlines, screenlineStations, surveyStations }
+                             by new { screenlines.SlineCode, stations.Direction }
+                       into newgrp
+                             select new
+                             {
+                                 Sline = newgrp.Key.SlineCode,
+                                 Direction = newgrp.Key.Direction,
+                                 SumRecords = newgrp.Count()
+                             }
+                ).ToDictionary(entry => (entry.Sline, entry.Direction), entry => entry.SumRecords);
+            foreach (var item in datalist)
+            {
+                if (!newlist.TryGetValue((item.SlineCode, item.Direction), out var counts))
                 {
-                    var row = newlist[item];
-                    builder.Append(item.screenlinename);
-                    builder.Append(',');
-                    builder.Append(item.direction);
-                    builder.Append(',');
-                    builder.Append(checkSums[(item.screenlinename, item.direction)]);
-                    builder.Append(',');
-                    builder.Append(checkSums[(item.screenlinename, item.direction)] * sumRecord);
-                    builder.Append(",");
-                    builder.Append(minimumStartTime);
-                    builder.Append(',');
-                    builder.Append(maximumEndTime);
-                    foreach (var x in row)
-                    {
-                        builder.Append(',');
-                        builder.Append(x);
-                    }
-                    builder.AppendLine();
+                    newlist[(item.SlineCode, item.Direction)] = counts = new int[individualCategorySelect.Length];
                 }
-                return builder.ToString();
+                counts[Array.IndexOf(individualCategorySelect, item.VehicleCountTypeId)] += item.Observations;
+            }
+
+            foreach (var item in from x in newlist.Keys
+                                 orderby x.screenlinename
+                                 select x
+                                 )
+            {
+                var row = newlist[item];
+                builder.Append(item.screenlinename);
+                builder.Append(',');
+                builder.Append(item.direction);
+                builder.Append(',');
+                builder.Append(checkSums[(item.screenlinename, item.direction)]);
+                builder.Append(',');
+                builder.Append(checkSums[(item.screenlinename, item.direction)] * sumRecord);
+                builder.Append(",");
+                builder.Append(minimumStartTime);
+                builder.Append(',');
+                builder.Append(maximumEndTime);
+                foreach (var x in row)
+                {
+                    builder.Append(',');
+                    builder.Append(x);
+                }
+                builder.AppendLine();
             }
             return builder.ToString();
         }
