@@ -369,8 +369,7 @@ namespace CCDRS.Pages
                                 Time = grp.Key.Time
                             }
                       ).ToList();
-            var builder = new StringBuilder();
-
+            
             if (datalist.Count <= 0)
             {
                 return string.Empty;
@@ -413,6 +412,7 @@ namespace CCDRS.Pages
                 counts[Array.IndexOf(individualCategorySelect, item.VehicleCountTypeId)] += item.Observations;
             }
 
+            var builder = new StringBuilder();
             foreach (var item in from x in newlist.Keys
                                  orderby x.screenlinename
                                  select x
